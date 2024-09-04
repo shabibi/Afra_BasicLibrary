@@ -10,15 +10,68 @@ namespace BasicLibrary
         static void Main(string[] args)
         {// downloaded form ahmed device 
             bool ExitFlag = false;
+            int choice;
             LoadBooksFromFile();
+
+            do {
+
+                Console.WriteLine("Welcome to Library");
+                Console.WriteLine("\nLogin as..\n\nEnter the number of your choice: ");
+                Console.WriteLine("\n 1- Admin ");
+                Console.WriteLine("\n 2- User");
+                Console.WriteLine("\n 3- Exit");
+                choice = int.Parse(Console.ReadLine());
+                switch (choice)
+                {
+                    case 1:
+                        AdminMenu();
+                        break;
+
+                    case 2:
+                        UserMenu();
+                        break;
+
+                    case 3:
+                        //SaveBooksToFile();
+                        ExitFlag = true;
+                        break;
+
+                    default:
+                        Console.WriteLine("Sorry your choice was wrong");
+                        break;
+
+
+
+                }
+
+                Console.WriteLine("press any key to continue");
+                string cont = Console.ReadLine();
+
+                Console.Clear();
+
+
+
+            } while (ExitFlag != true);
+         
+
+
+        }
+
+
+
+
+
+        static void AdminMenu()
+        {
+            bool ExitFlag = false;
             do
             {
-                Console.WriteLine("Welcome to Lirary");
+                Console.WriteLine("Welcome Admin");
                 Console.WriteLine("\n Enter the char of operation you need :");
                 Console.WriteLine("\n A- Add New Book");
                 Console.WriteLine("\n B- Display All Books");
                 Console.WriteLine("\n C- Search for Book by Name");
-                Console.WriteLine("\n D- Save and Exit");
+                Console.WriteLine("\n D- Exit");
 
                 string choice = Console.ReadLine();
 
@@ -37,7 +90,7 @@ namespace BasicLibrary
                         break;
 
                     case "D":
-                        SaveBooksToFile();
+                        //SaveBooksToFile();
                         ExitFlag = true;
                         break;
 
@@ -55,6 +108,56 @@ namespace BasicLibrary
                 Console.Clear();
 
             } while (ExitFlag != true);
+
+        }
+
+        static void UserMenu()
+        {
+            bool ExitFlag = false;
+            do
+            {
+                Console.WriteLine("Welcome User");
+                Console.WriteLine("\n Enter the char of operation you need :");
+                Console.WriteLine("\n A- Search for Book by Name");
+                Console.WriteLine("\n B- Borrow Book");
+                Console.WriteLine("\n C- Return Book");
+                Console.WriteLine("\n D- Exit");
+
+                string choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "A":
+                        SearchForBook();
+                        break;
+
+                    case "B":
+                        BorrowBook();
+                        break;
+
+                    case "C":
+                        ReturnBook();
+                        break;
+
+                    case "D":
+                        //SaveBooksToFile();
+                        ExitFlag = true;
+                        break;
+
+                    default:
+                        Console.WriteLine("Sorry your choice was wrong");
+                        break;
+
+
+                }
+
+                Console.WriteLine("press any key to continue");
+                string cont = Console.ReadLine();
+
+                Console.Clear();
+
+            } while (ExitFlag != true);
+
         }
         static void AddnNewBook() 
         { 
@@ -159,5 +262,15 @@ namespace BasicLibrary
             }
         }
 
+        static void BorrowBook()
+        {
+
+        }
+        
+        static void ReturnBook()
+        {
+
+        }
     }
 }
+
