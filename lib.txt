@@ -1,0 +1,2 @@
+book1|aaa|123
+book2|ddd|324

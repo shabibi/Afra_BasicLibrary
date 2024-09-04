@@ -270,6 +270,28 @@ namespace BasicLibrary
 
         static void BorrowBook()
         {
+            LoadBooksFromFile();
+            ViewAllBooks();
+            Console.WriteLine("Enter Book ID");
+            int ID = int.Parse(Console.ReadLine());
+            for (int i = 0; i < Books.Count; i++)
+            {
+                if(Books[i].ID == ID)
+                {
+                    if (Books[i].Qun> 0)
+                    {
+                        Books[i] = (Books[i].BName, Books[i].BAuthor, Books[i].ID,(Books[i].Qun-1));
+                        Console.WriteLine(Books[i].BName +" availabe.\nPlease Return it withen 2 weeks..");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Book not availabe");
+                    }
+                }
+            }
+               
+
+
 
         }
         
