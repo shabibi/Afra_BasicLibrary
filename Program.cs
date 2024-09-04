@@ -156,22 +156,37 @@ namespace BasicLibrary
         {
             Console.Clear();
             Console.WriteLine("\t\tAdding Book\n");
-
-            Console.WriteLine("Enter Book Name");
-            string name = Console.ReadLine();
-
-            Console.WriteLine("Enter Book Author");
-            string author= Console.ReadLine();  
-
+            ViewAllBooks();
+            bool flag = false;
             Console.WriteLine("Enter Book ID");
             int ID = handelIntError(Console.ReadLine());
+            foreach (var book in Books)
+            {
+                if (book.ID == ID)
+                {
+                    Console.WriteLine("The id is existe..");
+                    flag = true;
+                    break;
 
-            Console.WriteLine("Enter Book Quantity");
-            int qun = handelIntError(Console.ReadLine());
+                }
+            }
+            if( flag !=true)
+            {
+                Console.WriteLine("Enter Book Name");
+                string name = Console.ReadLine();
+
+                Console.WriteLine("Enter Book Author");
+                string author = Console.ReadLine();
+
+                Console.WriteLine("Enter Book Quantity");
+                int qun = handelIntError(Console.ReadLine());
 
 
-            Books.Add(  ( name, author, ID ,qun)  );
-            Console.WriteLine("Book Added Succefully");
+                Books.Add((name, author, ID, qun));
+                Console.WriteLine("Book Added Succefully");
+
+            }
+             
 
         }
 
