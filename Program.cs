@@ -4,8 +4,8 @@ namespace BasicLibrary
 {
     internal class Program
     {
-        static List<(string BName, string BAuthor, int ID)> Books = new List<(string BName, string BAuthor, int ID)>();
-        static string filePath = "C:\\Users\\Karim\\Downloads\\OutSystem_Course\\GitHubRepos\\Data\\lib.txt";
+        static List<(string BName, string BAuthor, int ID, int Qun)> Books = new List<(string BName, string BAuthor, int ID,int Qun)>();
+        static string filePath = "C:\\Users\\Codeline User\\Desktop\\Afra\\lib.txt";
 
         static void Main(string[] args)
         {// downloaded form ahmed device 
@@ -32,7 +32,7 @@ namespace BasicLibrary
                         break;
 
                     case 3:
-                        //SaveBooksToFile();
+                        SaveBooksToFile();
                         ExitFlag = true;
                         break;
 
@@ -86,11 +86,11 @@ namespace BasicLibrary
                         break;
 
                     case "C":
-                        SearchForBook();
+                        //SearchForBook();
                         break;
 
                     case "D":
-                        //SaveBooksToFile();
+                        SaveBooksToFile();
                         ExitFlag = true;
                         break;
 
@@ -161,17 +161,21 @@ namespace BasicLibrary
         }
         static void AddnNewBook() 
         { 
-                 Console.WriteLine("Enter Book Name");
-                 string name = Console.ReadLine();   
+            Console.WriteLine("Enter Book Name");
+            string name = Console.ReadLine();
 
-                 Console.WriteLine("Enter Book Author");
-                 string author= Console.ReadLine();  
+            Console.WriteLine("Enter Book Author");
+            string author= Console.ReadLine();  
 
-                 Console.WriteLine("Enter Book ID");
-                 int ID = int.Parse(Console.ReadLine());
+            Console.WriteLine("Enter Book ID");
+            int ID = int.Parse(Console.ReadLine());
 
-                  Books.Add(  ( name, author, ID )  );
-                  Console.WriteLine("Book Added Succefully");
+            Console.WriteLine("Enter Book Quantity");
+            int qun = int.Parse(Console.ReadLine());
+
+
+            Books.Add(  ( name, author, ID ,qun)  );
+            Console.WriteLine("Book Added Succefully");
 
         }
 
@@ -189,6 +193,8 @@ namespace BasicLibrary
                 sb.Append("Book ").Append(BookNumber).Append(" Author : ").Append(Books[i].BAuthor);
                 sb.AppendLine();
                 sb.Append("Book ").Append(BookNumber).Append(" ID : ").Append(Books[i].ID);
+                sb.AppendLine();
+                sb.Append("Book ").Append(BookNumber).Append(" Quantity : ").Append(Books[i].Qun);
                 sb.AppendLine().AppendLine();
                 Console.WriteLine(sb.ToString());
                 sb.Clear();
@@ -228,9 +234,9 @@ namespace BasicLibrary
                         while ((line = reader.ReadLine()) != null)
                         {
                             var parts = line.Split('|');
-                            if (parts.Length == 3)
+                            if (parts.Length == 4)
                             {
-                                Books.Add((parts[0], parts[1], int.Parse(parts[2])));
+                                Books.Add((parts[0], parts[1], int.Parse(parts[2]), int.Parse(parts[3])));
                             }
                         }
                     }
