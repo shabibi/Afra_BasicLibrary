@@ -44,20 +44,12 @@ namespace BasicLibrary
 
                 }
 
-                Console.WriteLine("press any key to continue");
-                string cont = Console.ReadLine();
-
                 Console.Clear();
-
 
 
             } while (ExitFlag != true);
          
-
-
         }
-
-
 
 
 
@@ -66,6 +58,7 @@ namespace BasicLibrary
             bool ExitFlag = false;
             do
             {
+                Console.Clear();
                 Console.WriteLine("Welcome Admin");
                 Console.WriteLine("\n Enter the char of operation you need :");
                 Console.WriteLine("\n A- Add New Book");
@@ -90,7 +83,6 @@ namespace BasicLibrary
                         break;
 
                     case "D":
-                        //SaveBooksToFile();
                         ExitFlag = true;
                         break;
 
@@ -105,8 +97,6 @@ namespace BasicLibrary
                 Console.WriteLine("press any key to continue");
                 string cont = Console.ReadLine();
 
-                Console.Clear();
-
             } while (ExitFlag != true);
 
         }
@@ -116,6 +106,7 @@ namespace BasicLibrary
             bool ExitFlag = false;
             do
             {
+                Console.Clear();
                 Console.WriteLine("Welcome User");
                 Console.WriteLine("\n Enter the char of operation you need :");
                 Console.WriteLine("\n A- Search for Book by Name");
@@ -154,13 +145,16 @@ namespace BasicLibrary
                 Console.WriteLine("press any key to continue");
                 string cont = Console.ReadLine();
 
-                Console.Clear();
+                
 
             } while (ExitFlag != true);
 
         }
         static void AddnNewBook() 
-        { 
+        {
+            Console.Clear();
+            Console.WriteLine("\t\tAdding Book\n");
+
             Console.WriteLine("Enter Book Name");
             string name = Console.ReadLine();
 
@@ -181,21 +175,19 @@ namespace BasicLibrary
 
         static void ViewAllBooks()
         {
+            Console.Clear();
+            Console.WriteLine("\t\t Books \n");
             StringBuilder sb = new StringBuilder();
 
             int BookNumber = 0;
+            Console.WriteLine("ID\tTitle\tAuther\tQuantity ");
 
             for (int i = 0; i < Books.Count; i++)
             {             
                 BookNumber = i + 1;
-                sb.Append("Book ").Append(BookNumber).Append(" name : ").Append(Books[i].BName);
+                sb.Append(Books[i].ID).Append("\t").Append(Books[i].BName).Append("\t").Append(Books[i].BAuthor).Append("\t").Append(Books[i].Qun);
                 sb.AppendLine();
-                sb.Append("Book ").Append(BookNumber).Append(" Author : ").Append(Books[i].BAuthor);
-                sb.AppendLine();
-                sb.Append("Book ").Append(BookNumber).Append(" ID : ").Append(Books[i].ID);
-                sb.AppendLine();
-                sb.Append("Book ").Append(BookNumber).Append(" Quantity : ").Append(Books[i].Qun);
-                sb.AppendLine().AppendLine();
+              
                 Console.WriteLine(sb.ToString());
                 sb.Clear();
 
@@ -289,10 +281,7 @@ namespace BasicLibrary
                     }
                 }
             }
-               
-
-
-
+              
         }
         
         static void ReturnBook()
