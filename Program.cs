@@ -282,7 +282,9 @@ namespace BasicLibrary
         {
            
             ViewAllBooks();
+            bool flge = false;  
             Console.WriteLine("Enter Book ID");
+           
             int ID = handelIntError(Console.ReadLine());
             for (int i = 0; i < Books.Count; i++)
             {
@@ -297,14 +299,22 @@ namespace BasicLibrary
                     {
                         Console.WriteLine("Book not availabe");
                     }
+                    flge = true;
                 }
+
             }
+            if (flge != true)
+            {
+                Console.WriteLine("Book not availabe");
+            }
+
               
         }
         
         static void ReturnBook()
         {
             ViewAllBooks();
+            bool flge = false;
             Console.WriteLine("Enter Book ID");
             int ID = handelIntError(Console.ReadLine());
             for (int i = 0; i < Books.Count; i++)
@@ -313,10 +323,16 @@ namespace BasicLibrary
                 {
                     Books[i] = (Books[i].BName, Books[i].BAuthor, Books[i].ID, (Books[i].Qun + 1));
                     Console.WriteLine(Books[i].BName + " returned to the library\n\nThank you.");
+                    flge = true;
                 }
                 
             }
-            
+
+            if (flge != true)
+            {
+                Console.WriteLine("Book not exist..");
+            }
+
         }
 
         static int handelIntError(string input)
