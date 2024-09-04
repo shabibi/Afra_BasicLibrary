@@ -20,7 +20,7 @@ namespace BasicLibrary
                 Console.WriteLine("\n 1- Admin ");
                 Console.WriteLine("\n 2- User");
                 Console.WriteLine("\n 3- Exit");
-                choice = int.Parse(Console.ReadLine());
+                choice = handelIntError(Console.ReadLine());
                 switch (choice)
                 {
                     case 1:
@@ -53,6 +53,8 @@ namespace BasicLibrary
 
 
 
+
+
         static void AdminMenu()
         {
             bool ExitFlag = false;
@@ -66,8 +68,8 @@ namespace BasicLibrary
                 Console.WriteLine("\n C- Search for Book by Name");
                 Console.WriteLine("\n D- Exit");
 
-                string choice = Console.ReadLine();
-
+                string choice = Console.ReadLine().ToUpper();
+                
                 switch (choice)
                 {
                     case "A":
@@ -114,7 +116,7 @@ namespace BasicLibrary
                 Console.WriteLine("\n C- Return Book");
                 Console.WriteLine("\n D- Exit");
 
-                string choice = Console.ReadLine();
+                string choice = Console.ReadLine().ToUpper();
 
                 switch (choice)
                 {
@@ -162,10 +164,10 @@ namespace BasicLibrary
             string author= Console.ReadLine();  
 
             Console.WriteLine("Enter Book ID");
-            int ID = int.Parse(Console.ReadLine());
+            int ID = handelIntError(Console.ReadLine());
 
             Console.WriteLine("Enter Book Quantity");
-            int qun = int.Parse(Console.ReadLine());
+            int qun = handelIntError(Console.ReadLine());
 
 
             Books.Add(  ( name, author, ID ,qun)  );
@@ -196,13 +198,14 @@ namespace BasicLibrary
 
         static void SearchForBook()
         {
+            ViewAllBooks();
             Console.WriteLine("Enter the book name you want");
-            string name = Console.ReadLine();  
+            string name = Console.ReadLine().ToUpper();  
             bool flag=false;
 
             for(int i = 0; i< Books.Count;i++)
             {
-                if (Books[i].BName == name)
+                if (Books[i].BName.ToUpper() == name)
                 {
                     Console.WriteLine("Book Author is : " + Books[i].BAuthor);
                     flag = true;
@@ -265,7 +268,7 @@ namespace BasicLibrary
            
             ViewAllBooks();
             Console.WriteLine("Enter Book ID");
-            int ID = int.Parse(Console.ReadLine());
+            int ID = handelIntError(Console.ReadLine());
             for (int i = 0; i < Books.Count; i++)
             {
                 if(Books[i].ID == ID)
@@ -288,13 +291,34 @@ namespace BasicLibrary
         {
             ViewAllBooks();
             Console.WriteLine("Enter Book ID");
-            int ID = int.Parse(Console.ReadLine());
+            int ID = handelIntError(Console.ReadLine());
             for (int i = 0; i < Books.Count; i++)
             {
 
                 Books[i] = (Books[i].BName, Books[i].BAuthor, Books[i].ID, (Books[i].Qun +1));
                 Console.WriteLine(Books[i].BName + " returned to the library\n\nThank you.");
             }
+        }
+
+        static int handelIntError(string input)
+        {
+            int num;
+            bool flag = true;
+            do
+            {
+                if (int.TryParse(input, out num))
+                {
+                    flag = false;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input");
+                    Console.WriteLine("re-enter input");
+                    input = Console.ReadLine();
+                    flag = true;
+                }
+            } while (flag == true);
+            return num;
         }
     }
 }
