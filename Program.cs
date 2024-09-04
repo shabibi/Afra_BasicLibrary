@@ -164,7 +164,7 @@ namespace BasicLibrary
             {
                 if (book.ID == ID)
                 {
-                    Console.WriteLine("The id is existe..");
+                    Console.WriteLine("The id is exist..");
                     flag = true;
                     break;
 
@@ -309,10 +309,14 @@ namespace BasicLibrary
             int ID = handelIntError(Console.ReadLine());
             for (int i = 0; i < Books.Count; i++)
             {
-
-                Books[i] = (Books[i].BName, Books[i].BAuthor, Books[i].ID, (Books[i].Qun +1));
-                Console.WriteLine(Books[i].BName + " returned to the library\n\nThank you.");
+                if (Books[i].ID == ID)
+                {
+                    Books[i] = (Books[i].BName, Books[i].BAuthor, Books[i].ID, (Books[i].Qun + 1));
+                    Console.WriteLine(Books[i].BName + " returned to the library\n\nThank you.");
+                }
+                
             }
+            
         }
 
         static int handelIntError(string input)
