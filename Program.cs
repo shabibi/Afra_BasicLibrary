@@ -86,11 +86,11 @@ namespace BasicLibrary
                         break;
 
                     case "C":
-                        //SearchForBook();
+                        SearchForBook();
                         break;
 
                     case "D":
-                        SaveBooksToFile();
+                        //SaveBooksToFile();
                         ExitFlag = true;
                         break;
 
@@ -257,7 +257,7 @@ namespace BasicLibrary
                 {
                     foreach (var book in Books)
                     {
-                        writer.WriteLine($"{book.BName}|{book.BAuthor}|{book.ID}");
+                        writer.WriteLine($"{book.BName}|{book.BAuthor}|{book.ID}|{book.Qun}");
                     }
                 }
                 Console.WriteLine("Books saved to file successfully.");
@@ -270,7 +270,7 @@ namespace BasicLibrary
 
         static void BorrowBook()
         {
-            LoadBooksFromFile();
+           
             ViewAllBooks();
             Console.WriteLine("Enter Book ID");
             int ID = int.Parse(Console.ReadLine());
@@ -297,7 +297,15 @@ namespace BasicLibrary
         
         static void ReturnBook()
         {
+            ViewAllBooks();
+            Console.WriteLine("Enter Book ID");
+            int ID = int.Parse(Console.ReadLine());
+            for (int i = 0; i < Books.Count; i++)
+            {
 
+                Books[i] = (Books[i].BName, Books[i].BAuthor, Books[i].ID, (Books[i].Qun +1));
+                Console.WriteLine(Books[i].BName + " returned to the library\n\nThank you.");
+            }
         }
     }
 }
