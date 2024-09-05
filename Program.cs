@@ -342,6 +342,7 @@ namespace BasicLibrary
                         break;
 
                     case 2:
+                        EditBookeAuthor(index);
                         break;
 
                     case 3:
@@ -356,6 +357,55 @@ namespace BasicLibrary
             else
             {
                 Console.WriteLine("Invalid ID");
+            }
+        }
+        static void EditBookeTitle(int index)
+        {
+            Console.WriteLine("\tEdit " + Books[index].BName + " Title\n");
+            Console.WriteLine("Enter new title: ");
+            string title = Console.ReadLine();
+
+            Console.WriteLine("The new book edite is");
+            Console.WriteLine(Books[index].ID + "\t" + title + "\t" + Books[index].BAuthor + "\t" + Books[index].Qun);
+            Console.WriteLine("Press 1 to confirm ");
+
+            string confirm = Console.ReadLine();
+            if (confirm == "1")
+            {
+                Books[index] = ((title, Books[index].BAuthor, Books[index].ID, Books[index].Qun));
+                SaveBooksToFile();
+                Console.WriteLine();
+                Console.WriteLine("The new name is saved..");
+                
+            }
+            else
+            {
+                Console.WriteLine("The change was not saved..");
+            }
+        }
+        static void EditBookeAuthor(int index)
+        {
+            Console.WriteLine("\tEdit " + Books[index].BAuthor + " Auther\n");
+            Console.WriteLine("Enter new auther name: ");
+            string Author = Console.ReadLine();
+
+            Console.WriteLine("The new book edite is");
+            Console.WriteLine(Books[index].ID + "\t" + Books[index].BName + "\t" + Author + "\t" + Books[index].Qun);
+            Console.WriteLine("Press 1 to confirm ");
+
+            string confirm = Console.ReadLine();
+            if (confirm == "1")
+            {
+                Books[index] = ((Books[index].BName, Author, Books[index].ID, Books[index].Qun));
+                Console.WriteLine();
+                SaveBooksToFile();
+                Console.WriteLine("The new auther is saved..");
+                
+                
+            }
+            else
+            {
+                Console.WriteLine("The change was not saved..");
             }
         }
 
@@ -437,30 +487,7 @@ namespace BasicLibrary
             return num;
         }
 
-        static void EditBookeTitle(int index)
-        {
-            Console.WriteLine("\tEdit " + Books[index].BName + " Title\n");
-            Console.WriteLine("Enter new title: ");
-            string title = Console.ReadLine();
-
-            Console.WriteLine("The new book edite is");
-            Console.WriteLine(Books[index].ID+"\t"+title+"\t"+Books[index].BAuthor+"\t"+Books[index].Qun);
-            Console.WriteLine("Press 1 to confirm ");
-            
-            string confirm = Console.ReadLine();
-            if (confirm == "1")
-            {
-                Books[index] = ((title, Books[index].BAuthor, Books[index].ID, Books[index].Qun));
-                Console.WriteLine();
-                Console.WriteLine("The new name is saved..");
-                SaveBooksToFile();
-                ViewAllBooks();
-            }
-            else
-            {
-                Console.WriteLine("The change was not saved..");
-            }
-        }
+        
     }
 }
 
