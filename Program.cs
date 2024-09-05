@@ -548,26 +548,7 @@ namespace BasicLibrary
 
             }
         }
-        static void AddNewAdmin()
-        {
-            try
-            {
-                using (StreamWriter writer = new StreamWriter(AdminFile))
-                {
-                    foreach (string user in AdminUsers)
-                    {
-                        writer.WriteLine(user);
-                    }
-                }
-                Console.WriteLine("Admin saved to file successfully.");
-                Console.WriteLine("press any key to continue");
-                string cont = Console.ReadLine();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error saving to file: {ex.Message}");
-            }
-        }
+       
             
         static void AdminsFile()
         {
@@ -592,9 +573,29 @@ namespace BasicLibrary
             }
         }
 
-
+        static void AddNewAdmin()
+        {
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(AdminFile))
+                {
+                    foreach (string user in AdminUsers)
+                    {
+                        writer.WriteLine(user);
+                    }
+                }
+                Console.WriteLine("Admin saved to file successfully.");
+                Console.WriteLine("press any key to continue");
+                string cont = Console.ReadLine();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving to file: {ex.Message}");
+            }
+        }
         static void CheckUser()
         {
+            
             
             int password;
             Console.WriteLine("Enter user name");
@@ -630,6 +631,7 @@ namespace BasicLibrary
                     password = handelIntError(Console.ReadLine());
 
                     Users.Add((userName, password));
+                    AddNewUser();
                     UserMenu();
 
                 }
@@ -647,6 +649,28 @@ namespace BasicLibrary
             }
             
         
+        }
+
+        static void AddNewUser()
+        {
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(UsersFile))
+                {
+                    foreach (var user in Users)
+                    {
+                        writer.WriteLine($"{user.UserName}|{user.password}");
+                    }
+                }
+
+                Console.WriteLine("User saved to file successfully.");
+                Console.WriteLine("press any key to continue");
+                string cont = Console.ReadLine();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving to file: {ex.Message}");
+            }
         }
 
         static int handelIntError(string input)
@@ -670,7 +694,10 @@ namespace BasicLibrary
             return num;
         }
 
-        
+       
+
+
+
     }
 }
 
