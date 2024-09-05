@@ -346,9 +346,11 @@ namespace BasicLibrary
                         break;
 
                     case 3:
+                        EditBookeQuantity(index);
                         break;
 
                     default:
+                        Console.WriteLine("Invaild input");
                         break;
 
                 }
@@ -385,7 +387,7 @@ namespace BasicLibrary
         }
         static void EditBookeAuthor(int index)
         {
-            Console.WriteLine("\tEdit " + Books[index].BAuthor + " Auther\n");
+            Console.WriteLine("\tEdit " + Books[index].BName + " Auther\n");
             Console.WriteLine("Enter new auther name: ");
             string Author = Console.ReadLine();
 
@@ -401,7 +403,30 @@ namespace BasicLibrary
                 SaveBooksToFile();
                 Console.WriteLine("The new auther is saved..");
                 
-                
+            }
+            else
+            {
+                Console.WriteLine("The change was not saved..");
+            }
+        }
+        static void EditBookeQuantity(int index)
+        {
+            Console.WriteLine("\tEdit " + Books[index].BName + " Quantity\n");
+            Console.WriteLine("Enter new Quantity : ");
+            int qun = handelIntError(Console.ReadLine());
+
+            Console.WriteLine("The new book edite is");
+            Console.WriteLine(Books[index].ID + "\t" + Books[index].BName + "\t" + Books[index].BAuthor + "\t" + qun);
+            Console.WriteLine("Press 1 to confirm ");
+
+            string confirm = Console.ReadLine();
+            if (confirm == "1")
+            {
+                Books[index] = ((Books[index].BName, Books[index].BAuthor, Books[index].ID, qun));
+                Console.WriteLine();
+                SaveBooksToFile();
+                Console.WriteLine("The new Quantity is saved..");
+
             }
             else
             {
