@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 // test check out
 namespace BasicLibrary
 {
@@ -63,33 +64,37 @@ namespace BasicLibrary
                 Console.Clear();
                 Console.WriteLine("Welcome Admin");
                 Console.WriteLine("\n Enter the char of operation you need :");
-                Console.WriteLine("\n A- Add New Book");
-                Console.WriteLine("\n B- Display All Books");
-                Console.WriteLine("\n C- Remove Book");
-                Console.WriteLine("\n D- Search for Book by Name");
-                Console.WriteLine("\n E- Exit");
+                Console.WriteLine("\n 1- Add New Book");
+                Console.WriteLine("\n 2- Display All Books");
+                Console.WriteLine("\n 3- Remove Book");
+                Console.WriteLine("\n 4- Edit Book");
+                Console.WriteLine("\n 5- Search for Book by Name");
+                Console.WriteLine("\n 6- Exit");
 
-                string choice = Console.ReadLine().ToUpper();
+                int choice = handelIntError(Console.ReadLine());
                 
                 switch (choice)
                 {
-                    case "A":
+                    case 1:
                         AddnNewBook();
                         break;
 
-                    case "B":
+                    case 2:
                         ViewAllBooks();
                         break;
 
-                    case "D":
-                        SearchForBook();
-                        break;
-
-                    case "C":
+                    case 3:
                         RemoveBook();
                         break;
 
-                    case "E":
+                    case 4:
+                        EditBook();
+                        break;
+                    case 5:
+                        SearchForBook();
+                        break;
+
+                    case 6:
                         ExitFlag = true;
                         break;
 
@@ -219,6 +224,7 @@ namespace BasicLibrary
         {
             ViewAllBooks();
             Console.WriteLine("Enter Book ID");
+            bool flge = false;
 
             int ID = handelIntError(Console.ReadLine());
             for (int i = 0; i < Books.Count; i++) 
@@ -226,7 +232,12 @@ namespace BasicLibrary
                 if (Books[i].ID == ID)
                 {
                     Books.RemoveAt(i);
+                    flge = true;
                 }
+            }
+            if (flge != true)
+            {
+                Console.WriteLine("Book not availabe");
             }
 
         }
@@ -295,6 +306,56 @@ namespace BasicLibrary
             catch (Exception ex)
             {
                 Console.WriteLine($"Error saving to file: {ex.Message}");
+            }
+        }
+
+        static void EditBook()
+        {
+            ViewAllBooks();
+            
+            StringBuilder sb = new StringBuilder();
+            int index = -1;
+            Console.WriteLine("Enter Book ID");
+            int ID = handelIntError(Console.ReadLine());
+
+            for (int i = 0; i < Books.Count; i++)
+            {
+                if (Books[i].ID == ID)
+                {
+                    index = i;
+                    Console.WriteLine("\nID\tTitle\tAuther\tQuantity ");
+                    Console.WriteLine(Books[i].ID + "\t" + Books[i].BName + "\t" + Books[index].BAuthor + "\t" + Books[index].Qun);
+                }
+            }
+            
+            Console.WriteLine("Choose number to edit:");
+            Console.WriteLine("1.Book Title\n2.Book Auther\n3.Book Quantity");
+        
+            int choice = handelIntError(Console.ReadLine());
+
+            if (index != -1)
+            {
+                switch (choice)
+                {
+                    case 1:
+                        EditBookeTitle(index);
+                        break;
+
+                    case 2:
+                        break;
+
+                    case 3:
+                        break;
+
+                    default:
+                        break;
+
+                }
+
+            }
+            else
+            {
+                Console.WriteLine("Invalid ID");
             }
         }
 
@@ -374,6 +435,31 @@ namespace BasicLibrary
                 }
             } while (flag == true);
             return num;
+        }
+
+        static void EditBookeTitle(int index)
+        {
+            Console.WriteLine("\tEdit " + Books[index].BName + " Title\n");
+            Console.WriteLine("Enter new title: ");
+            string title = Console.ReadLine();
+
+            Console.WriteLine("The new book edite is");
+            Console.WriteLine(Books[index].ID+"\t"+title+"\t"+Books[index].BAuthor+"\t"+Books[index].Qun);
+            Console.WriteLine("Press 1 to confirm ");
+            
+            string confirm = Console.ReadLine();
+            if (confirm == "1")
+            {
+                Books[index] = ((title, Books[index].BAuthor, Books[index].ID, Books[index].Qun));
+                Console.WriteLine();
+                Console.WriteLine("The new name is saved..");
+                SaveBooksToFile();
+                ViewAllBooks();
+            }
+            else
+            {
+                Console.WriteLine("The change was not saved..");
+            }
         }
     }
 }
