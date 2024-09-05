@@ -65,8 +65,9 @@ namespace BasicLibrary
                 Console.WriteLine("\n Enter the char of operation you need :");
                 Console.WriteLine("\n A- Add New Book");
                 Console.WriteLine("\n B- Display All Books");
-                Console.WriteLine("\n C- Search for Book by Name");
-                Console.WriteLine("\n D- Exit");
+                Console.WriteLine("\n C- Remove Book");
+                Console.WriteLine("\n D- Search for Book by Name");
+                Console.WriteLine("\n E- Exit");
 
                 string choice = Console.ReadLine().ToUpper();
                 
@@ -80,18 +81,21 @@ namespace BasicLibrary
                         ViewAllBooks();
                         break;
 
-                    case "C":
+                    case "D":
                         SearchForBook();
                         break;
 
-                    case "D":
+                    case "C":
+                        RemoveBook();
+                        break;
+
+                    case "E":
                         ExitFlag = true;
                         break;
 
                     default:
                         Console.WriteLine("Sorry your choice was wrong");
                         break;
-
 
 
                 }
@@ -209,6 +213,22 @@ namespace BasicLibrary
                 sb.Clear();
 
             }
+        }
+
+        static void RemoveBook()
+        {
+            ViewAllBooks();
+            Console.WriteLine("Enter Book ID");
+
+            int ID = handelIntError(Console.ReadLine());
+            for (int i = 0; i < Books.Count; i++) 
+            {
+                if (Books[i].ID == ID)
+                {
+                    Books.RemoveAt(i);
+                }
+            }
+
         }
 
         static void SearchForBook()
