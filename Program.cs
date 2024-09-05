@@ -6,6 +6,7 @@ namespace BasicLibrary
     internal class Program
     {
         static List<(string BName, string BAuthor, int ID, int Qun)> Books = new List<(string BName, string BAuthor, int ID,int Qun)>();
+        static List<string> AdminUsers = new List<string>();
         static string filePath = "C:\\Users\\Codeline User\\Desktop\\Afra\\lib.txt";
 
         static void Main(string[] args)
@@ -25,7 +26,7 @@ namespace BasicLibrary
                 switch (choice)
                 {
                     case 1:
-                        AdminMenu();
+                        CheckAdmin();
                         break;
 
                     case 2:
@@ -352,15 +353,14 @@ namespace BasicLibrary
                     default:
                         Console.WriteLine("Invaild input");
                         break;
-
                 }
-
             }
             else
             {
                 Console.WriteLine("Invalid ID");
             }
         }
+
         static void EditBookeTitle(int index)
         {
             Console.WriteLine("\tEdit " + Books[index].BName + " Title\n");
@@ -385,6 +385,7 @@ namespace BasicLibrary
                 Console.WriteLine("The change was not saved..");
             }
         }
+
         static void EditBookeAuthor(int index)
         {
             Console.WriteLine("\tEdit " + Books[index].BName + " Auther\n");
@@ -409,6 +410,7 @@ namespace BasicLibrary
                 Console.WriteLine("The change was not saved..");
             }
         }
+
         static void EditBookeQuantity(int index)
         {
             Console.WriteLine("\tEdit " + Books[index].BName + " Quantity\n");
@@ -490,6 +492,61 @@ namespace BasicLibrary
             }
 
         }
+
+        static void CheckAdmin()
+        {
+            int Fixedpassword = 12345;
+            int password;
+            
+
+            Console.WriteLine("Enter user name");
+            string userName = Console.ReadLine();
+           
+            
+            if (AdminUsers.Contains(userName))
+            {
+                Console.WriteLine("Enter Password..");
+                password = handelIntError(Console.ReadLine());
+                if (Fixedpassword == password)
+                {
+                    AdminMenu();
+                }
+                else
+                {
+                    Console.WriteLine("Incorrect Password");
+                    Console.WriteLine("press any key to continue");
+                    string cont = Console.ReadLine();
+                }
+            }
+            else
+            {
+                Console.WriteLine("User name not Registered befor..");
+                Console.WriteLine("Do you want to add new admin?(enter 1 or 2)\n1.yes \n2.no");
+               int choice = handelIntError(Console.ReadLine());
+                
+                if(choice == 1)
+                {
+                    Console.WriteLine("Enter Admin Password..");
+                    password = handelIntError(Console.ReadLine());
+                    if (Fixedpassword == password)
+                    {
+                        AdminUsers.Add(userName);
+                        Console.WriteLine("New Admin Added Succefully");
+                        AdminMenu();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Incorrect Admin Password");
+                        Console.WriteLine("press any key to continue");
+                        string cont = Console.ReadLine();
+                    }
+                }
+
+            }
+        }
+            
+
+        
 
         static int handelIntError(string input)
         {
