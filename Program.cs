@@ -595,8 +595,8 @@ namespace BasicLibrary
         }
         static void CheckUser()
         {
-            
-            
+            Users.Clear();
+            ReadUsersFormFile();
             int password;
             Console.WriteLine("Enter user name");
             string userName = Console.ReadLine();
@@ -670,6 +670,33 @@ namespace BasicLibrary
             catch (Exception ex)
             {
                 Console.WriteLine($"Error saving to file: {ex.Message}");
+            }
+        }
+
+        static void ReadUsersFormFile()
+        {
+            try
+            {
+                if (File.Exists(UsersFile))
+                {
+                    using (StreamReader reader = new StreamReader(UsersFile))
+                    {
+                        string line;
+                        while ((line = reader.ReadLine()) != null)
+                        {
+                            var parts = line.Split('|');
+                            if (parts.Length == 2)
+                            {
+                                Users.Add((parts[0],handelIntError( parts[1])));
+                            }
+                        }
+                    }
+              
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading from file: {ex.Message}");
             }
         }
 
