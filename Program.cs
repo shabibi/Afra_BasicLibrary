@@ -8,6 +8,7 @@ namespace BasicLibrary
         static List<(string BName, string BAuthor, int ID, int Qun)> Books = new List<(string BName, string BAuthor, int ID,int Qun)>();
         static List<string> AdminUsers = new List<string>();
         static string filePath = "C:\\Users\\Codeline User\\Desktop\\Afra\\lib.txt";
+        static string AdminFile = "C:\\Users\\Codeline User\\Desktop\\Afra\\Admin.txt";
 
         static void Main(string[] args)
         {// downloaded form ahmed device 
@@ -497,7 +498,8 @@ namespace BasicLibrary
         {
             int Fixedpassword = 12345;
             int password;
-            
+            AdminUsers.Clear();
+            AdminsFile();
 
             Console.WriteLine("Enter user name");
             string userName = Console.ReadLine();
@@ -531,7 +533,7 @@ namespace BasicLibrary
                     if (Fixedpassword == password)
                     {
                         AdminUsers.Add(userName);
-                        Console.WriteLine("New Admin Added Succefully");
+                        AddNewAdmin();
                         AdminMenu();
                     }
                     else
@@ -544,8 +546,49 @@ namespace BasicLibrary
 
             }
         }
+        static void AddNewAdmin()
+        {
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(AdminFile))
+                {
+                    foreach (string user in AdminUsers)
+                    {
+                        writer.WriteLine(user);
+                    }
+                }
+                Console.WriteLine("Admin saved to file successfully.");
+                Console.WriteLine("press any key to continue");
+                string cont = Console.ReadLine();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving to file: {ex.Message}");
+            }
+        }
             
-
+        static void AdminsFile()
+        {
+            try
+            {
+                if (File.Exists(AdminFile))
+                {
+                    using (StreamReader reader = new StreamReader(AdminFile))
+                    {
+                        string line;
+                        while ((line = reader.ReadLine()) != null)
+                        {
+                                AdminUsers.Add((line));
+                        }
+                    }
+                   
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading from file: {ex.Message}");
+            }
+        }
         
 
         static int handelIntError(string input)
