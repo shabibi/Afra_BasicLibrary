@@ -7,8 +7,10 @@ namespace BasicLibrary
     {
         static List<(string BName, string BAuthor, int ID, int Qun)> Books = new List<(string BName, string BAuthor, int ID,int Qun)>();
         static List<string> AdminUsers = new List<string>();
+        static List<(string UserName, int password)> Users = new List<(string UserName, int password)>();
         static string filePath = "C:\\Users\\Codeline User\\Desktop\\Afra\\lib.txt";
         static string AdminFile = "C:\\Users\\Codeline User\\Desktop\\Afra\\Admin.txt";
+        static string UsersFile = "C:\\Users\\Codeline User\\Desktop\\Afra\\Users.txt";
 
         static void Main(string[] args)
         {// downloaded form ahmed device 
@@ -31,7 +33,7 @@ namespace BasicLibrary
                         break;
 
                     case 2:
-                        UserMenu();
+                        CheckUser();
                         break;
 
                     case 3:
@@ -589,7 +591,63 @@ namespace BasicLibrary
                 Console.WriteLine($"Error loading from file: {ex.Message}");
             }
         }
+
+
+        static void CheckUser()
+        {
+            
+            int password;
+            Console.WriteLine("Enter user name");
+            string userName = Console.ReadLine();
+            Console.WriteLine("Enter Password..");
+            password = handelIntError(Console.ReadLine());
+
+            if (!(Users.Contains((userName, password))))
+            {
+                for (int i = 0;i<Users.Count;i++)
+                {
+                    if (Users[i].UserName == userName)
+                    {
+                        if (Users[i].password != password)
+                        {
+                            Console.WriteLine("Incorrect Passward");
+                            Console.WriteLine("press any key to continue");
+                            string cont = Console.ReadLine();
+                            return;
+                        }
+                    }
+                }
+                Console.WriteLine("Not Registered befor..");
+                Console.WriteLine("Do you want to Regester?(enter 1 or 2)\n1.yes \n2.no");
+                int choice = handelIntError(Console.ReadLine());
+
+                if (choice == 1)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Enter user name");
+                    userName = Console.ReadLine();
+                    Console.WriteLine("Enter Password..");
+                    password = handelIntError(Console.ReadLine());
+
+                    Users.Add((userName, password));
+                    UserMenu();
+
+                }
+                else
+                {
+                    Console.WriteLine("Incorrect Admin Password");
+                    Console.WriteLine("press any key to continue");
+                    string cont = Console.ReadLine();
+                }
+
+            }
+            else
+            {
+                UserMenu();
+            }
+            
         
+        }
 
         static int handelIntError(string input)
         {
