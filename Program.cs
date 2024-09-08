@@ -504,18 +504,23 @@ namespace BasicLibrary
             borrowBook.Clear();
             LoadBooksFromFile();
             LoadBorrowedBookFile() ;
-            ViewAllBooks();
+            
             bool flge = false;
-           // int index = -1;
+         
+            Console.WriteLine("\nBooks you have borrowed .. ");
+            for(int i=0; i< borrowBook.Count; i++)
+            {
+                if (borrowBook[i].userId == userID)
+                {
+                    Console.WriteLine(borrowBook[i].BookId + "\t" + Books[borrowBook[i].BookId].BName + "\t");
+                }
+            }
+
             Console.WriteLine("Enter Book ID");
             int ID = handelIntError(Console.ReadLine());
             for (int i = 0; i < Books.Count; i++)
             {
-                //if ((borrowBook[i].BookId== ID) && (borrowBook[i].userId == userID))
-                //{
-                //    index = i+1;
-                //}
-
+                
                 if (Books[i].ID == ID)
                 {
                     Books[i] = (Books[i].BName, Books[i].BAuthor, Books[i].ID, (Books[i].Qun + 1));
