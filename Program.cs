@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using static System.Reflection.Metadata.BlobBuilder;
 // test check out
 namespace BasicLibrary
 {
@@ -19,7 +20,7 @@ namespace BasicLibrary
         {// downloaded form ahmed device 
             bool ExitFlag = false;
             int choice;
-            //LoadBooksFromFile();
+            LoadBooksFromFile();
 
             do {
 
@@ -176,24 +177,12 @@ namespace BasicLibrary
         {
             Console.Clear();
             Console.WriteLine("\t\tAdding Book\n");
+            Books.Clear();
             LoadBooksFromFile();
             ViewAllBooks();
-            bool flag = false;
-            Console.WriteLine("Enter Book ID");
-            int ID = handelIntError(Console.ReadLine());
-            foreach (var book in Books)
-            {
-                if (book.ID == ID)
-                {
-                    Console.WriteLine("The id is exist..");
-                    flag = true;
-                    break;
 
-                }
-            }
-            if( flag !=true)
-            {
-                ID = Books.Count;
+
+                int  ID = Books.Count;
                 Console.WriteLine("Enter Book Name");
                 string name = Console.ReadLine();
 
@@ -208,7 +197,7 @@ namespace BasicLibrary
                 SaveBooksToFile();
                 Console.WriteLine("Book Added Succefully");
 
-            }
+            
              
 
         }
@@ -236,6 +225,7 @@ namespace BasicLibrary
 
         static void RemoveBook()
         {
+            Books.Clear();
             LoadBooksFromFile();
             ViewAllBooks();
 
@@ -328,6 +318,7 @@ namespace BasicLibrary
 
         static void EditBook()
         {
+            Books.Clear();
             LoadBooksFromFile();
             ViewAllBooks();
             
@@ -508,14 +499,14 @@ namespace BasicLibrary
 
             
             bool flge = false;
-            int index;
+            int index=-1;
          
             Console.WriteLine("\nBooks you have borrowed .. ");
             for(int i=0; i< borrowBook.Count; i++)
             {
                 if (borrowBook[i].userId == userID)
                 {
-                    Console.WriteLine(borrowBook[i].BookId + "\t" + Books[borrowBook[i].BookId].BName + "\t");
+                    Console.WriteLine(borrowBook[i].BookId + "\t" + Books[Books.FindIndex(book => book.ID == borrowBook[i].BookId)].BName + "\t");
                 }
             }
 
@@ -526,7 +517,7 @@ namespace BasicLibrary
                 
                 if ((borrowBook[i].BookId == ID) && (borrowBook[i].userId ==userID))
                 {
-                    index = borrowBook[i].BookId;
+                    index = Books.FindIndex(book => book.ID == borrowBook[i].BookId);
                     Books[index] = (Books[index].BName, Books[index].BAuthor, Books[index].ID, (Books[index].Qun + 1));
                     Console.WriteLine(Books[index].BName + " returned to the library\n\nThank you.");
 
@@ -879,9 +870,12 @@ namespace BasicLibrary
             }
             List<int> FinalSuggestedBookIds = SuggestedBookIds.Distinct().ToList();
             Console.WriteLine("People who borrowed this book also borrowed with it");
-            for (int i=0;i<FinalSuggestedBookIds.Count;i++)
+            if (FinalSuggestedBookIds.Count != 0)
             {
-                Console.WriteLine( Books[FinalSuggestedBookIds[i]].BName );
+                for (int i = 0; i < FinalSuggestedBookIds.Count; i++)
+                {
+                    Console.WriteLine(Books[FinalSuggestedBookIds[i]].BName);
+                }
             }
         }
 
