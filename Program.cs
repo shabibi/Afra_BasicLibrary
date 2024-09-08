@@ -19,7 +19,7 @@ namespace BasicLibrary
         {// downloaded form ahmed device 
             bool ExitFlag = false;
             int choice;
-            LoadBooksFromFile();
+            //LoadBooksFromFile();
 
             do {
 
@@ -176,6 +176,7 @@ namespace BasicLibrary
         {
             Console.Clear();
             Console.WriteLine("\t\tAdding Book\n");
+            LoadBooksFromFile();
             ViewAllBooks();
             bool flag = false;
             Console.WriteLine("Enter Book ID");
@@ -235,7 +236,9 @@ namespace BasicLibrary
 
         static void RemoveBook()
         {
+            LoadBooksFromFile();
             ViewAllBooks();
+
             Console.WriteLine("Enter Book ID");
             bool flge = false;
 
@@ -245,6 +248,7 @@ namespace BasicLibrary
                 if (Books[i].ID == ID)
                 {
                     Books.RemoveAt(i);
+                    SaveBooksToFile();
                     flge = true;
                 }
             }
@@ -324,6 +328,7 @@ namespace BasicLibrary
 
         static void EditBook()
         {
+            LoadBooksFromFile();
             ViewAllBooks();
             
             StringBuilder sb = new StringBuilder();
@@ -450,9 +455,15 @@ namespace BasicLibrary
 
         static void BorrowBook()
         {
-           
-            ViewAllBooks();
+            Books.Clear();
+            LoadBooksFromFile();
+
+            borrowBook.Clear();
+            LoadBorrowedBookFile();
+
             
+            ViewAllBooks();
+          
             bool flge = false;  
             
             Console.WriteLine("Enter Book ID");
@@ -466,7 +477,10 @@ namespace BasicLibrary
                     {
                         Books[i] = (Books[i].BName, Books[i].BAuthor, Books[i].ID,(Books[i].Qun-1));
                         Console.WriteLine(Books[i].BName +" availabe.\nPlease Return it withen 2 weeks..");
-                        BorrowedBookFile(userID, ID);
+                        SaveBooksToFile() ;
+
+                        borrowBook.Add((userID, ID));
+                        BorrowedBookFile();
                     }
                     else
                     {
@@ -486,16 +500,30 @@ namespace BasicLibrary
         
         static void ReturnBook()
         {
+            Books.Clear();
+            borrowBook.Clear();
+            LoadBooksFromFile();
+            LoadBorrowedBookFile() ;
             ViewAllBooks();
             bool flge = false;
+           // int index = -1;
             Console.WriteLine("Enter Book ID");
             int ID = handelIntError(Console.ReadLine());
             for (int i = 0; i < Books.Count; i++)
             {
+                //if ((borrowBook[i].BookId== ID) && (borrowBook[i].userId == userID))
+                //{
+                //    index = i+1;
+                //}
+
                 if (Books[i].ID == ID)
                 {
                     Books[i] = (Books[i].BName, Books[i].BAuthor, Books[i].ID, (Books[i].Qun + 1));
                     Console.WriteLine(Books[i].BName + " returned to the library\n\nThank you.");
+
+                    borrowBook.Remove((userID,ID));
+                    BorrowedBookFile() ;
+                    SaveBooksToFile();
                     flge = true;
                 }
                 
@@ -722,18 +750,20 @@ namespace BasicLibrary
             }
         }
 
-        static void BorrowedBookFile(int userId , int bookId)
+        static void BorrowedBookFile()
         {
             try
             {
-                using (StreamWriter writer = new StreamWriter(BorrowFile,true))
+                using (StreamWriter writer = new StreamWriter(BorrowFile))
                 {
-                    
-                        writer.WriteLine($"{userId}|{bookId}");
-                    
-                }
+                    foreach (var book in borrowBook)
+                    {
 
-                Console.WriteLine("Book added to borrow file.");
+                        writer.WriteLine($"{book.userId}|{book.BookId}");
+
+                    }
+                }
+                // Console.WriteLine("Book added to borrow file.");
                 Console.WriteLine("press any key to continue");
                 string cont = Console.ReadLine();
             }
