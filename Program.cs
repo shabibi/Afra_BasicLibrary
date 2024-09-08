@@ -481,6 +481,7 @@ namespace BasicLibrary
 
                         borrowBook.Add((userID, ID));
                         BorrowedBookFile();
+                        BookSuggestion(ID);
                     }
                     else
                     {
@@ -848,6 +849,40 @@ namespace BasicLibrary
             Console.WriteLine("Number of Books in Library is : " + booksInLibrary);
             Console.WriteLine("Most borrowed book : " + Books[popularBookId].BName);
 
+        }
+
+        static void BookSuggestion(int bId)
+        {
+            List<int> SimilarPeopleIds= new List<int>  ();
+          List<int> SuggestedBookIds = new List<int> ();    
+            for (int i = 0; i < borrowBook.Count; i++)
+            {
+                if (bId == borrowBook[i].BookId)
+                {
+                    if (borrowBook[i].userId != userID)
+                    {
+                        SimilarPeopleIds.Add(borrowBook[i].userId);
+                    }
+                }
+            }
+            for (int j = 0; j < SimilarPeopleIds.Count; j++)
+            {
+
+                for (int i = 0; i < borrowBook.Count; i++)
+                {
+                    if (borrowBook[i].userId == SimilarPeopleIds[j] && borrowBook[i].BookId != bId)
+                    {
+                        SuggestedBookIds.Add(borrowBook[i].BookId);
+                        //;
+                    }
+                }
+            }
+            List<int> FinalSuggestedBookIds = SuggestedBookIds.Distinct().ToList();
+            Console.WriteLine("People who borrowed this book also borrowed with it");
+            for (int i=0;i<FinalSuggestedBookIds.Count;i++)
+            {
+                Console.WriteLine( Books[FinalSuggestedBookIds[i]].BName );
+            }
         }
 
         static int handelIntError(string input)
