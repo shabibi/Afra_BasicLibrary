@@ -8,6 +8,7 @@ namespace BasicLibrary
         static List<(string BName, string BAuthor, int ID, int Qun)> Books = new List<(string BName, string BAuthor, int ID,int Qun)>();
         static List<string> AdminUsers = new List<string>();
         static List<(string UserName, int password)> Users = new List<(string UserName, int password)>();
+        static List<(int userId, int BookId)>borrowBook = new List<(int userId, int BookId)>();
         static string filePath = "C:\\Users\\Codeline User\\Desktop\\Afra\\lib.txt";
         static string AdminFile = "C:\\Users\\Codeline User\\Desktop\\Afra\\Admin.txt";
         static string UsersFile = "C:\\Users\\Codeline User\\Desktop\\Afra\\Users.txt";
@@ -445,6 +446,7 @@ namespace BasicLibrary
         {
            
             ViewAllBooks();
+            
             bool flge = false;  
             
             Console.WriteLine("Enter Book ID");
@@ -732,6 +734,34 @@ namespace BasicLibrary
             catch (Exception ex)
             {
                 Console.WriteLine($"Error saving to file: {ex.Message}");
+            }
+
+        }
+        static void LoadBorrowedBookFile()
+        {
+
+            try
+            {
+                if (File.Exists(BorrowFile))
+                {
+                    using (StreamReader reader = new StreamReader(BorrowFile))
+                    {
+                        string line;
+                        while ((line = reader.ReadLine()) != null)
+                        {
+                            var parts = line.Split('|');
+                            if (parts.Length == 2)
+                            {
+                                borrowBook.Add((handelIntError( parts[0]), handelIntError(parts[1])));
+                            }
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading from file: {ex.Message}");
             }
 
         }
