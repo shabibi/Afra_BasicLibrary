@@ -76,7 +76,8 @@ namespace BasicLibrary
                 Console.WriteLine("\n 3- Remove Book");
                 Console.WriteLine("\n 4- Edit Book");
                 Console.WriteLine("\n 5- Search for Book by Name");
-                Console.WriteLine("\n 6- Exit");
+                Console.WriteLine("\n 6- Display Report");
+                Console.WriteLine("\n 7- Exit");
 
                 int choice = handelIntError(Console.ReadLine());
                 
@@ -100,8 +101,11 @@ namespace BasicLibrary
                     case 5:
                         SearchForBook();
                         break;
-
                     case 6:
+                        Report();
+                        break;
+
+                    case 7:
                         ExitFlag = true;
                         break;
 
@@ -188,6 +192,7 @@ namespace BasicLibrary
             }
             if( flag !=true)
             {
+                ID = Books.Count;
                 Console.WriteLine("Enter Book Name");
                 string name = Console.ReadLine();
 
@@ -199,6 +204,7 @@ namespace BasicLibrary
 
 
                 Books.Add((name, author, ID, qun));
+                SaveBooksToFile();
                 Console.WriteLine("Book Added Succefully");
 
             }
@@ -763,6 +769,48 @@ namespace BasicLibrary
             {
                 Console.WriteLine($"Error loading from file: {ex.Message}");
             }
+
+        }
+
+        static void Report()
+        {
+            Books.Clear();
+            
+            LoadBorrowedBookFile();
+            LoadBooksFromFile();
+            int booksInLibrary = 0;
+            
+            for (int i = 0; i < Books.Count; i++)
+            {
+                booksInLibrary += Books[i].Qun;
+            }
+
+            int[] popularBook = new int[Books.Count];
+            int popularBookId =-1; 
+            for (int i = 0; i < borrowBook.Count; i++) 
+            {
+                for (int j = 0; j < popularBook.Length; j++)
+                {
+                    if(borrowBook[i].BookId == j)
+                    {
+                        popularBook[j]++;
+                    }
+                }
+                
+            }
+            
+            for(int i = 0;i < popularBook.Length; i++)
+            {
+                if (popularBook[i] == popularBook.Max())
+                {
+                    popularBookId = i;
+                }
+            }
+
+            
+            Console.WriteLine("Number of Borroed Books is : "+borrowBook.Count);
+            Console.WriteLine("Number of Books in Library is : " + booksInLibrary);
+            Console.WriteLine("Most borrowed book : " + Books[popularBookId].BName);
 
         }
 
