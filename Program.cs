@@ -11,6 +11,8 @@ namespace BasicLibrary
         static string filePath = "C:\\Users\\Codeline User\\Desktop\\Afra\\lib.txt";
         static string AdminFile = "C:\\Users\\Codeline User\\Desktop\\Afra\\Admin.txt";
         static string UsersFile = "C:\\Users\\Codeline User\\Desktop\\Afra\\Users.txt";
+        static string BorrowFile = "C:\\Users\\Codeline User\\Desktop\\Afra\\Borrow.txt";
+        static int userID = 0;
 
         static void Main(string[] args)
         {// downloaded form ahmed device 
@@ -444,6 +446,7 @@ namespace BasicLibrary
            
             ViewAllBooks();
             bool flge = false;  
+            
             Console.WriteLine("Enter Book ID");
            
             int ID = handelIntError(Console.ReadLine());
@@ -455,6 +458,7 @@ namespace BasicLibrary
                     {
                         Books[i] = (Books[i].BName, Books[i].BAuthor, Books[i].ID,(Books[i].Qun-1));
                         Console.WriteLine(Books[i].BName +" availabe.\nPlease Return it withen 2 weeks..");
+                        BorrowedBookFile(userID, ID);
                     }
                     else
                     {
@@ -597,12 +601,19 @@ namespace BasicLibrary
         {
             Users.Clear();
             ReadUsersFormFile();
+            
             int password;
             Console.WriteLine("Enter user name");
             string userName = Console.ReadLine();
             Console.WriteLine("Enter Password..");
             password = handelIntError(Console.ReadLine());
-
+            for (int i = 0; i < Users.Count; i++)
+            {
+                if (Users[i].UserName == userName)
+                {
+                    userID = i;
+                }
+            }
             if (!(Users.Contains((userName, password))))
             {
                 for (int i = 0;i<Users.Count;i++)
@@ -614,6 +625,7 @@ namespace BasicLibrary
                             Console.WriteLine("Incorrect Passward");
                             Console.WriteLine("press any key to continue");
                             string cont = Console.ReadLine();
+                            
                             return;
                         }
                     }
@@ -631,6 +643,7 @@ namespace BasicLibrary
                     password = handelIntError(Console.ReadLine());
 
                     Users.Add((userName, password));
+                    userID = Users.Count;
                     AddNewUser();
                     UserMenu();
 
@@ -646,6 +659,7 @@ namespace BasicLibrary
             else
             {
                 UserMenu();
+                
             }
             
         
@@ -698,6 +712,28 @@ namespace BasicLibrary
             {
                 Console.WriteLine($"Error loading from file: {ex.Message}");
             }
+        }
+
+        static void BorrowedBookFile(int userId , int bookId)
+        {
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(BorrowFile,true))
+                {
+                    
+                        writer.WriteLine($"{userId}|{bookId}");
+                    
+                }
+
+                Console.WriteLine("Book added to borrow file.");
+                Console.WriteLine("press any key to continue");
+                string cont = Console.ReadLine();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving to file: {ex.Message}");
+            }
+
         }
 
         static int handelIntError(string input)
