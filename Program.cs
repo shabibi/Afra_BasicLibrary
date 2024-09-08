@@ -504,8 +504,10 @@ namespace BasicLibrary
             borrowBook.Clear();
             LoadBooksFromFile();
             LoadBorrowedBookFile() ;
+
             
             bool flge = false;
+            int index;
          
             Console.WriteLine("\nBooks you have borrowed .. ");
             for(int i=0; i< borrowBook.Count; i++)
@@ -518,13 +520,14 @@ namespace BasicLibrary
 
             Console.WriteLine("Enter Book ID");
             int ID = handelIntError(Console.ReadLine());
-            for (int i = 0; i < Books.Count; i++)
+            for (int i = 0; i < borrowBook.Count; i++)
             {
                 
-                if (Books[i].ID == ID)
+                if ((borrowBook[i].BookId == ID) && (borrowBook[i].userId ==userID))
                 {
-                    Books[i] = (Books[i].BName, Books[i].BAuthor, Books[i].ID, (Books[i].Qun + 1));
-                    Console.WriteLine(Books[i].BName + " returned to the library\n\nThank you.");
+                    index = borrowBook[i].BookId;
+                    Books[index] = (Books[index].BName, Books[index].BAuthor, Books[index].ID, (Books[index].Qun + 1));
+                    Console.WriteLine(Books[index].BName + " returned to the library\n\nThank you.");
 
                     borrowBook.Remove((userID,ID));
                     BorrowedBookFile() ;
@@ -691,7 +694,7 @@ namespace BasicLibrary
                 }
                 else
                 {
-                    Console.WriteLine("Incorrect Admin Password");
+                    Console.WriteLine("Incorrect user Password");
                     Console.WriteLine("press any key to continue");
                     string cont = Console.ReadLine();
                 }
@@ -768,9 +771,7 @@ namespace BasicLibrary
 
                     }
                 }
-                // Console.WriteLine("Book added to borrow file.");
-                Console.WriteLine("press any key to continue");
-                string cont = Console.ReadLine();
+               
             }
             catch (Exception ex)
             {
