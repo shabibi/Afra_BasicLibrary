@@ -23,7 +23,6 @@ namespace BasicLibrary
             LoadBooksFromFile();
 
             do {
-
                 Console.WriteLine("Welcome to Library");
                 Console.WriteLine("\nLogin as..\n\nEnter the number of your choice: ");
                 Console.WriteLine("\n 1- Admin ");
@@ -48,19 +47,11 @@ namespace BasicLibrary
                     default:
                         Console.WriteLine("Sorry your choice was wrong");
                         break;
-
-
-
                 }
-
                 Console.Clear();
 
-
             } while (ExitFlag != true);
-         
         }
-
-
 
 
 
@@ -113,8 +104,6 @@ namespace BasicLibrary
                     default:
                         Console.WriteLine("Sorry your choice was wrong");
                         break;
-
-
                 }
 
                 Console.WriteLine("press any key to continue");
@@ -180,26 +169,21 @@ namespace BasicLibrary
             Books.Clear();
             LoadBooksFromFile();
             ViewAllBooks();
-
-
-                int  ID = Books.Count;
-                Console.WriteLine("Enter Book Name");
-                string name = Console.ReadLine();
-
-                Console.WriteLine("Enter Book Author");
-                string author = Console.ReadLine();
-
-                Console.WriteLine("Enter Book Quantity");
-                int qun = handelIntError(Console.ReadLine());
-
-
-                Books.Add((name, author, ID, qun));
-                SaveBooksToFile();
-                Console.WriteLine("Book Added Succefully");
-
             
-             
-
+            int  ID = Books.Count;
+            Console.WriteLine("Enter Book Name");
+            string name = Console.ReadLine();
+            
+            Console.WriteLine("Enter Book Author");
+            string author = Console.ReadLine();
+            
+            Console.WriteLine("Enter Book Quantity");
+            int qun = handelIntError(Console.ReadLine());
+            
+            Books.Add((name, author, ID, qun));
+            SaveBooksToFile();
+            Console.WriteLine("Book Added Succefully");
+        
         }
 
         static void ViewAllBooks()
@@ -695,10 +679,7 @@ namespace BasicLibrary
             else
             {
                 UserMenu();
-                
             }
-            
-        
         }
 
         static void AddNewUser()
@@ -814,7 +795,6 @@ namespace BasicLibrary
             }
 
             int[] popularBook = new int[Books.Count];
-            int popularBookId =-1; 
             for (int i = 0; i < borrowBook.Count; i++) 
             {
                 for (int j = 0; j < popularBook.Length; j++)
@@ -826,19 +806,17 @@ namespace BasicLibrary
                 }
                 
             }
-            
-            for(int i = 0;i < popularBook.Length; i++)
+
+            Console.WriteLine("Number of Borroed Books is : " + borrowBook.Count);
+            Console.WriteLine("Number of Books in Library is : " + booksInLibrary);
+            Console.WriteLine("Most borrowed book : " );
+            for (int i = 0;i < popularBook.Length; i++)
             {
                 if (popularBook[i] == popularBook.Max())
                 {
-                    popularBookId = i;
+                    Console.WriteLine(Books[i].BName);
                 }
             }
-
-            
-            Console.WriteLine("Number of Borroed Books is : "+borrowBook.Count);
-            Console.WriteLine("Number of Books in Library is : " + booksInLibrary);
-            Console.WriteLine("Most borrowed book : " + Books[popularBookId].BName);
 
         }
 
@@ -864,7 +842,7 @@ namespace BasicLibrary
                     if (borrowBook[i].userId == SimilarPeopleIds[j] && borrowBook[i].BookId != bId)
                     {
                         SuggestedBookIds.Add(borrowBook[i].BookId);
-                        //;
+
                     }
                 }
             }
