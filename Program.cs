@@ -107,7 +107,7 @@ namespace BasicLibrary
                         break;
                 }
 
-                Console.WriteLine("press any key to continue");
+                Console.WriteLine("press enter key to continue");
                 string cont = Console.ReadLine();
 
             } while (ExitFlag != true);
@@ -155,7 +155,7 @@ namespace BasicLibrary
 
                 }
 
-                Console.WriteLine("press any key to continue");
+                Console.WriteLine("press enter key to continue");
                 string cont = Console.ReadLine();
 
                 
@@ -592,7 +592,7 @@ namespace BasicLibrary
                 else
                 {
                     Console.WriteLine("Incorrect Password");
-                    Console.WriteLine("\npress any key to continue");
+                    Console.WriteLine("\npress enter key to continue");
                     string cont = Console.ReadLine();
                 }
             }
@@ -615,7 +615,7 @@ namespace BasicLibrary
                     else
                     {
                         Console.WriteLine("\nIncorrect Admin Password");
-                        Console.WriteLine("\npress any key to continue");
+                        Console.WriteLine("\npress enter key to continue");
                         string cont = Console.ReadLine();
                     }
                 }
@@ -660,7 +660,7 @@ namespace BasicLibrary
                     }
                 }
                 Console.WriteLine("\nAdmin saved to file successfully.");
-                Console.WriteLine("\npress any key to continue");
+                Console.WriteLine("\npress enter key to continue");
                 string cont = Console.ReadLine();
             }
             catch (Exception ex)
@@ -676,6 +676,8 @@ namespace BasicLibrary
             ReadUsersFormFile();
             
             int password;
+            bool flag = false;
+
             Console.WriteLine("\nEnter user name");
             string userName = Console.ReadLine();
 
@@ -700,7 +702,7 @@ namespace BasicLibrary
                         if (Users[i].password != password)
                         {
                             Console.WriteLine("Incorrect Passward");
-                            Console.WriteLine("\npress any key to continue");
+                            Console.WriteLine("\npress enter key to continue");
                             string cont = Console.ReadLine();
                             
                             return;
@@ -717,19 +719,42 @@ namespace BasicLibrary
                     Console.Clear();
                     Console.WriteLine("\nEnter user name");
                     userName = Console.ReadLine();
-                    Console.WriteLine("\nEnter Password..");
-                    password = handelIntError(Console.ReadLine());
+                    for (int i = 0; i < Users.Count; i++)
+                    {
+                        if (Users[i].UserName == userName)
+                        {
+                            Console.WriteLine("This User is registered");
+                            Console.WriteLine("\npress enter key to continue");
+                            string cont = Console.ReadLine();
+                            flag = true;
+                            return;
+                        }
 
-                    Users.Add((userName, password));
-                    userID = Users.Count;
-                    AddNewUser();
-                    UserMenu(userName);
+                    }
+                    if(flag != true)
+                    {
+                        Console.WriteLine("\nEnter Password..");
+                        password = handelIntError(Console.ReadLine());
 
+                        //check if username regestered before
+
+
+                        Users.Add((userName, password));
+                        userID = Users.Count;
+                        AddNewUser();
+                        UserMenu(userName);
+
+                    }
+                    
+
+                }
+                else if (choice == 2)
+                {
+                    return;
                 }
                 else
                 {
-                    Console.WriteLine("Incorrect user Password");
-                    Console.WriteLine("\npress any key to continue");
+                    Console.WriteLine("\npress enter key to continue");
                     string cont = Console.ReadLine();
                 }
 
@@ -754,7 +779,7 @@ namespace BasicLibrary
                 }
 
                 Console.WriteLine("\nUser saved to file successfully.");
-                Console.WriteLine("\npress any key to continue");
+                Console.WriteLine("\npress enter key to continue");
                 string cont = Console.ReadLine();
             }
             catch (Exception ex)
