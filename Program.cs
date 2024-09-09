@@ -62,7 +62,7 @@ namespace BasicLibrary
             {
                 Console.Clear();
                 Console.WriteLine("---------------Welcome "+ userName+ "---------------");
-                Console.WriteLine("\n\n Enter the char of operation you need :");
+                Console.WriteLine("\n\n Enter the number of operation you need :");
                 Console.WriteLine("\n   1- Add New Book");
                 Console.WriteLine("\n   2- Display All Books");
                 Console.WriteLine("\n   3- Remove Book");
@@ -383,15 +383,19 @@ namespace BasicLibrary
             }
         }
 
+        //Function for editing book title
         static void EditBookeTitle(int index)
         {
-            Console.WriteLine("\tEdit " + Books[index].BName + " Title\n");
+            Console.Clear();
+            Console.WriteLine("----------------------Edit " + Books[index].BName + " Title----------------------\n");
+          
+
             Console.WriteLine("Enter new title: ");
             string title = Console.ReadLine();
 
-            Console.WriteLine("The new book edite is");
+            Console.WriteLine("\nThe new book edite is\n");
             Console.WriteLine(Books[index].ID + "\t" + title + "\t" + Books[index].BAuthor + "\t" + Books[index].Qun);
-            Console.WriteLine("Press 1 to confirm ");
+            Console.WriteLine("\nPress 1 to confirm ");
 
             string confirm = Console.ReadLine();
             if (confirm == "1")
@@ -399,24 +403,26 @@ namespace BasicLibrary
                 Books[index] = ((title, Books[index].BAuthor, Books[index].ID, Books[index].Qun));
                 SaveBooksToFile();
                 Console.WriteLine();
-                Console.WriteLine("The new name is saved..");
+                Console.WriteLine("\nThe new name is saved..");
                 
             }
             else
             {
-                Console.WriteLine("The change was not saved..");
+                Console.WriteLine("\nThe change was not saved..");
             }
         }
-
+        //Function for editing book Author
         static void EditBookeAuthor(int index)
         {
-            Console.WriteLine("\tEdit " + Books[index].BName + " Auther\n");
+            Console.Clear();
+            Console.WriteLine("----------------------Edit " + Books[index].BName + " Auther----------------------\n");
+            
             Console.WriteLine("Enter new auther name: ");
             string Author = Console.ReadLine();
 
-            Console.WriteLine("The new book edite is");
+            Console.WriteLine("The new book edite is\n");
             Console.WriteLine(Books[index].ID + "\t" + Books[index].BName + "\t" + Author + "\t" + Books[index].Qun);
-            Console.WriteLine("Press 1 to confirm ");
+            Console.WriteLine("\nPress 1 to confirm ");
 
             string confirm = Console.ReadLine();
             if (confirm == "1")
@@ -424,24 +430,27 @@ namespace BasicLibrary
                 Books[index] = ((Books[index].BName, Author, Books[index].ID, Books[index].Qun));
                 Console.WriteLine();
                 SaveBooksToFile();
-                Console.WriteLine("The new auther is saved..");
+                Console.WriteLine("\nThe new auther is saved..");
                 
             }
             else
             {
-                Console.WriteLine("The change was not saved..");
+                Console.WriteLine("\nThe change was not saved..");
             }
         }
 
+        //Function for editing book Quantity
         static void EditBookeQuantity(int index)
         {
-            Console.WriteLine("\tEdit " + Books[index].BName + " Quantity\n");
-            Console.WriteLine("Enter new Quantity : ");
+            Console.Clear();
+            Console.WriteLine("---------------------Edit " + Books[index].BName + " Quantity---------------------\n");
+            
+            Console.WriteLine("\nEnter new Quantity : ");
             int qun = handelIntError(Console.ReadLine());
 
-            Console.WriteLine("The new book edite is");
+            Console.WriteLine("\nThe new book edite is");
             Console.WriteLine(Books[index].ID + "\t" + Books[index].BName + "\t" + Books[index].BAuthor + "\t" + qun);
-            Console.WriteLine("Press 1 to confirm ");
+            Console.WriteLine("\nPress 1 to confirm ");
 
             string confirm = Console.ReadLine();
             if (confirm == "1")
@@ -458,6 +467,7 @@ namespace BasicLibrary
             }
         }
 
+        //Function for borroing books and update quantity
         static void BorrowBook()
         {
             Books.Clear();
@@ -466,14 +476,15 @@ namespace BasicLibrary
             borrowBook.Clear();
             LoadBorrowedBookFile();
 
-            
+            Console.Clear();
+            Console.WriteLine("------------------------Borrow Book------------------------\n");
             ViewAllBooks();
           
             bool flge = false;  
             
             Console.WriteLine("Enter Book ID");
-           
             int ID = handelIntError(Console.ReadLine());
+
             for (int i = 0; i < Books.Count; i++)
             {
                 if(Books[i].ID == ID)
@@ -481,11 +492,15 @@ namespace BasicLibrary
                     if (Books[i].Qun> 0)
                     {
                         Books[i] = (Books[i].BName, Books[i].BAuthor, Books[i].ID,(Books[i].Qun-1));
-                        Console.WriteLine(Books[i].BName +" availabe.\nPlease Return it withen 2 weeks..");
-                        SaveBooksToFile() ;
+                        Console.WriteLine("\n"+Books[i].BName +" is availabe.\nPlease Return it withen 2 weeks..\n");
+                        Console.WriteLine("********************************************************************");
 
+                        //Add borrowing book in borrrow file and save changes in lib file
+                        SaveBooksToFile();
                         borrowBook.Add((userID, ID));
                         BorrowedBookFile();
+
+                        //Display suggestion list after borrowing
                         BookSuggestion(ID);
                     }
                     else
@@ -500,10 +515,10 @@ namespace BasicLibrary
             {
                 Console.WriteLine("Book not availabe");
             }
-
-              
+     
         }
-        
+
+        //Function for return books and apdate quantity 
         static void ReturnBook()
         {
             Books.Clear();
@@ -511,11 +526,15 @@ namespace BasicLibrary
             LoadBooksFromFile();
             LoadBorrowedBookFile() ;
 
-            
+            Console.Clear();
+            Console.WriteLine("------------------------Return Book------------------------\n");
+
             bool flge = false;
             int index=-1;
          
+            //Display list of borrowing books for user
             Console.WriteLine("\nBooks you have borrowed .. ");
+            Console.WriteLine("*****************************************************************");
             for(int i=0; i< borrowBook.Count; i++)
             {
                 if (borrowBook[i].userId == userID)
@@ -523,8 +542,8 @@ namespace BasicLibrary
                     Console.WriteLine(borrowBook[i].BookId + "\t" + Books[Books.FindIndex(book => book.ID == borrowBook[i].BookId)].BName + "\t");
                 }
             }
-
-            Console.WriteLine("Enter Book ID");
+            Console.WriteLine("*****************************************************************");
+            Console.WriteLine("\nEnter Book ID");
             int ID = handelIntError(Console.ReadLine());
             for (int i = 0; i < borrowBook.Count; i++)
             {
@@ -533,7 +552,7 @@ namespace BasicLibrary
                 {
                     index = Books.FindIndex(book => book.ID == borrowBook[i].BookId);
                     Books[index] = (Books[index].BName, Books[index].BAuthor, Books[index].ID, (Books[index].Qun + 1));
-                    Console.WriteLine(Books[index].BName + " returned to the library\n\nThank you.");
+                    Console.WriteLine("\n"+Books[index].BName + " returned to the library\n\nThank you.");
 
                     borrowBook.Remove((userID,ID));
                     BorrowedBookFile() ;
@@ -545,11 +564,12 @@ namespace BasicLibrary
 
             if (flge != true)
             {
-                Console.WriteLine("Book not exist..");
+                Console.WriteLine("\nBook not exist..");
             }
 
         }
 
+        //Verify Admin access and add admin if not found
         static void CheckAdmin()
         {
             int Fixedpassword = 12345;
@@ -557,13 +577,13 @@ namespace BasicLibrary
             AdminUsers.Clear();
             AdminsFile();
 
-            Console.WriteLine("Enter user name");
+            Console.WriteLine("\nEnter user name");
             string userName = Console.ReadLine();
            
             
             if (AdminUsers.Contains(userName))
             {
-                Console.WriteLine("Enter Password..");
+                Console.WriteLine("\nEnter Password..");
                 password = handelIntError(Console.ReadLine());
                 if (Fixedpassword == password)
                 {
@@ -572,14 +592,14 @@ namespace BasicLibrary
                 else
                 {
                     Console.WriteLine("Incorrect Password");
-                    Console.WriteLine("press any key to continue");
+                    Console.WriteLine("\npress any key to continue");
                     string cont = Console.ReadLine();
                 }
             }
             else
             {
-                Console.WriteLine("User name not Registered befor..");
-                Console.WriteLine("Do you want to add new admin?(enter 1 or 2)\n1.yes \n2.no");
+                Console.WriteLine("\nUser name not Registered befor..");
+                Console.WriteLine("\nDo you want to add new admin?(enter 1 or 2)\n1.yes \n2.no");
                int choice = handelIntError(Console.ReadLine());
                 
                 if(choice == 1)
@@ -594,8 +614,8 @@ namespace BasicLibrary
                     }
                     else
                     {
-                        Console.WriteLine("Incorrect Admin Password");
-                        Console.WriteLine("press any key to continue");
+                        Console.WriteLine("\nIncorrect Admin Password");
+                        Console.WriteLine("\npress any key to continue");
                         string cont = Console.ReadLine();
                     }
                 }
@@ -603,7 +623,7 @@ namespace BasicLibrary
             }
         }
        
-            
+       //Load admins from admin file   
         static void AdminsFile()
         {
             try
@@ -627,6 +647,7 @@ namespace BasicLibrary
             }
         }
 
+        //Save new admin name in admin file
         static void AddNewAdmin()
         {
             try
@@ -638,8 +659,8 @@ namespace BasicLibrary
                         writer.WriteLine(user);
                     }
                 }
-                Console.WriteLine("Admin saved to file successfully.");
-                Console.WriteLine("press any key to continue");
+                Console.WriteLine("\nAdmin saved to file successfully.");
+                Console.WriteLine("\npress any key to continue");
                 string cont = Console.ReadLine();
             }
             catch (Exception ex)
@@ -647,16 +668,20 @@ namespace BasicLibrary
                 Console.WriteLine($"Error saving to file: {ex.Message}");
             }
         }
+
+        //Verify User access and add user if not found
         static void CheckUser()
         {
             Users.Clear();
             ReadUsersFormFile();
             
             int password;
-            Console.WriteLine("Enter user name");
+            Console.WriteLine("\nEnter user name");
             string userName = Console.ReadLine();
-            Console.WriteLine("Enter Password..");
+
+            Console.WriteLine("\nEnter Password..");
             password = handelIntError(Console.ReadLine());
+
             for (int i = 0; i < Users.Count; i++)
             {
                 if (Users[i].UserName == userName)
@@ -664,6 +689,8 @@ namespace BasicLibrary
                     userID = i;
                 }
             }
+
+            //check Incorrect Passward
             if (!(Users.Contains((userName, password))))
             {
                 for (int i = 0;i<Users.Count;i++)
@@ -673,7 +700,7 @@ namespace BasicLibrary
                         if (Users[i].password != password)
                         {
                             Console.WriteLine("Incorrect Passward");
-                            Console.WriteLine("press any key to continue");
+                            Console.WriteLine("\npress any key to continue");
                             string cont = Console.ReadLine();
                             
                             return;
@@ -681,15 +708,16 @@ namespace BasicLibrary
                     }
                 }
                 Console.WriteLine("Not Registered befor..");
-                Console.WriteLine("Do you want to Regester?(enter 1 or 2)\n1.yes \n2.no");
+                Console.WriteLine("\nDo you want to Regester?(enter 1 or 2)\n1.yes \n2.no");
                 int choice = handelIntError(Console.ReadLine());
 
+                //Regester new user
                 if (choice == 1)
                 {
                     Console.Clear();
-                    Console.WriteLine("Enter user name");
+                    Console.WriteLine("\nEnter user name");
                     userName = Console.ReadLine();
-                    Console.WriteLine("Enter Password..");
+                    Console.WriteLine("\nEnter Password..");
                     password = handelIntError(Console.ReadLine());
 
                     Users.Add((userName, password));
@@ -701,7 +729,7 @@ namespace BasicLibrary
                 else
                 {
                     Console.WriteLine("Incorrect user Password");
-                    Console.WriteLine("press any key to continue");
+                    Console.WriteLine("\npress any key to continue");
                     string cont = Console.ReadLine();
                 }
 
@@ -712,6 +740,7 @@ namespace BasicLibrary
             }
         }
 
+        //Save new User name in user file
         static void AddNewUser()
         {
             try
@@ -724,8 +753,8 @@ namespace BasicLibrary
                     }
                 }
 
-                Console.WriteLine("User saved to file successfully.");
-                Console.WriteLine("press any key to continue");
+                Console.WriteLine("\nUser saved to file successfully.");
+                Console.WriteLine("\npress any key to continue");
                 string cont = Console.ReadLine();
             }
             catch (Exception ex)
@@ -734,6 +763,7 @@ namespace BasicLibrary
             }
         }
 
+        //Load Users from user file 
         static void ReadUsersFormFile()
         {
             try
@@ -761,6 +791,7 @@ namespace BasicLibrary
             }
         }
 
+        //Save new borrow books in borrow file
         static void BorrowedBookFile()
         {
             try
@@ -782,9 +813,10 @@ namespace BasicLibrary
             }
 
         }
+
+        //Load borrow books from borrow file
         static void LoadBorrowedBookFile()
         {
-
             try
             {
                 if (File.Exists(BorrowFile))
@@ -811,6 +843,7 @@ namespace BasicLibrary
 
         }
 
+        //Desplay Report to admin
         static void Report()
         {
             Books.Clear();
@@ -850,10 +883,15 @@ namespace BasicLibrary
 
         }
 
+        //Display Book Suggestion for user after borrowing book
         static void BookSuggestion(int bId)
         {
-            List<int> SimilarPeopleIds= new List<int>  ();
-          List<int> SuggestedBookIds = new List<int> ();    
+            
+          List<int> SuggestedBookIds = new List<int> ();
+
+            //add ids of user who borrow same book in list
+            List<int> SimilarPeopleIds = new List<int>();
+
             for (int i = 0; i < borrowBook.Count; i++)
             {
                 if (bId == borrowBook[i].BookId)
@@ -864,6 +902,7 @@ namespace BasicLibrary
                     }
                 }
             }
+            //add ids of books for users in SimilarPeopleIds in list
             for (int j = 0; j < SimilarPeopleIds.Count; j++)
             {
 
@@ -876,10 +915,13 @@ namespace BasicLibrary
                     }
                 }
             }
+            //Remove similar books in SuggestedBookIds list
             List<int> FinalSuggestedBookIds = SuggestedBookIds.Distinct().ToList();
-            Console.WriteLine("People who borrowed this book also borrowed with it");
+
+            //Display Suggestion list
             if (FinalSuggestedBookIds.Count != 0)
             {
+                Console.WriteLine("People who borrowed this book also borrowed with it");
                 for (int i = 0; i < FinalSuggestedBookIds.Count; i++)
                 {
                     Console.WriteLine(Books[FinalSuggestedBookIds[i]].BName);
@@ -887,6 +929,7 @@ namespace BasicLibrary
             }
         }
 
+        //Handel integer input errors
         static int handelIntError(string input)
         {
             int num;
