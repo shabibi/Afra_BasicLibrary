@@ -232,6 +232,9 @@ namespace BasicLibrary
 
             Books.Clear();
             LoadBooksFromFile();
+
+            borrowBook.Clear();
+            LoadBorrowedBookFile();
             ViewAllBooks();
             
             bool flge = false;
@@ -239,18 +242,29 @@ namespace BasicLibrary
 
             Console.WriteLine("Enter Book ID");
             int ID = handelIntError(Console.ReadLine());
-
-            for (int i = 0; i < Books.Count; i++) 
+            int index = -1;
+            for (int i = 0; i < Books.Count; i++)
             {
+                //index = borrowBook.FindIndex(book => book.BookId == Books[i].ID);
                 if (Books[i].ID == ID)
                 {
+                    for(int j = 0; j < borrowBook.Count; j++)
+                    {
+                        if (borrowBook[j].BookId == ID)
+                        {
+                            Console.WriteLine("This Book was Borrowed you cannot Remove it..");
+                            return;
+                        }
+                    }
                     removedBook = Books[i].BName;
                     Books.RemoveAt(i);
                     SaveBooksToFile();
                     flge = true;
                     Console.WriteLine(removedBook + " Removed from Library");
+
                 }
             }
+            
             if (flge != true)
             {
                 Console.WriteLine("Book not availabe");
@@ -554,22 +568,24 @@ namespace BasicLibrary
             Console.WriteLine("*****************************************************************");
             Console.WriteLine("\nEnter Book ID");
             int ID = handelIntError(Console.ReadLine());
-            for (int i = 0; i < borrowBook.Count; i++)
-            {
-                
-                if ((borrowBook[i].BookId == ID) && (borrowBook[i].userId ==userID))
+                for (int i = 0; i < borrowBook.Count; i++)
                 {
-                    index = Books.FindIndex(book => book.ID == borrowBook[i].BookId);
-                    Books[index] = (Books[index].BName, Books[index].BAuthor, Books[index].ID, (Books[index].Qun + 1));
-                    Console.WriteLine("\n"+Books[index].BName + " returned to the library\n\nThank you.");
 
-                    borrowBook.Remove((userID,ID));
-                    BorrowedBookFile() ;
-                    SaveBooksToFile();
-                    flge = true;
-                }
+                    if ((borrowBook[i].BookId == ID) && (borrowBook[i].userId == userID))
+                    {
+                        index = Books.FindIndex(book => book.ID == borrowBook[i].BookId);
+                        Books[index] = (Books[index].BName, Books[index].BAuthor, Books[index].ID, (Books[index].Qun + 1));
+                        Console.WriteLine("\n" + Books[index].BName + " returned to the library\n\nThank you.");
+
+                        borrowBook.Remove((userID, ID));
+                        BorrowedBookFile();
+                        SaveBooksToFile();
+                        flge = true;
+                    }
+                    
                 
-            }
+                
+                 }
 
             if (flge != true)
             {
