@@ -9,7 +9,7 @@ namespace BasicLibrary
     {
         static List<(string BName, string BAuthor, int ID, int Qun)> Books = new List<(string BName, string BAuthor, int ID,int Qun)>();
         static List<(int AID,string Aname, string email,int password)>Admin = new List<(int AID, string Aname, string email, int password)>();
-        static List<(string UserName, int password)> Users = new List<(string UserName, int password)>();
+        static List<(int UID,string UserName,string email, int password)> Users = new List<(int UID, string UserName, string email, int password)>();
         static List<(int userId, int BookId)>borrowBook = new List<(int userId, int BookId)>();
         static string filePath = "C:\\Users\\Codeline User\\Desktop\\Afra\\lib.txt";
         static string AdminFile = "C:\\Users\\Codeline User\\Desktop\\Afra\\Admin.txt";
@@ -724,93 +724,65 @@ namespace BasicLibrary
             
             int password;
             bool flag = false;
-
-            Console.WriteLine("\nEnter user name");
-            string userName = Console.ReadLine();
-
-            Console.WriteLine("\nEnter Password..");
-            password = handelIntError(Console.ReadLine());
-
-            for (int i = 0; i < Users.Count; i++)
+            Console.WriteLine("\nEnter your email");
+            string email = Console.ReadLine();
+            if (IsEmailValid(email))
             {
-                if (Users[i].UserName == userName)
+                for (int i = 0; i < Users.Count; i++)
                 {
-                    userID = i;
-                }
-            }
 
-            //check Incorrect Passward
-            if (!(Users.Contains((userName, password))))
-            {
-                for (int i = 0;i<Users.Count;i++)
-                {
-                    if (Users[i].UserName == userName)
+                    if (Users[i].email.Contains(email))
                     {
+                        Console.WriteLine("\nEnter Password..");
+                        password = handelIntError(Console.ReadLine());
                         if (Users[i].password != password)
                         {
                             Console.WriteLine("Incorrect Passward");
                             Console.WriteLine("\npress enter key to continue");
                             string cont = Console.ReadLine();
-                            
-                            return;
                         }
+                        else
+                        {
+                            UserMenu(Users[i].UserName);
+                        }
+                        return;
                     }
                 }
-                Console.WriteLine("Not Registered befor..");
-                Console.WriteLine("\nDo you want to Regester?(enter 1 or 2)\n1.yes \n2.no");
-                int choice = handelIntError(Console.ReadLine());
 
-                //Regester new user
+                Console.WriteLine("\nEmail not Registered befor..");
+                Console.WriteLine("\nDo you want to add new admin?(enter 1 if yes)");
+                int choice = handelIntError(Console.ReadLine());
                 if (choice == 1)
                 {
-                    Console.Clear();
-                    Console.WriteLine("\nEnter user name");
-                    userName = Console.ReadLine();
-                    for (int i = 0; i < Users.Count; i++)
-                    {
-                        if (Users[i].UserName == userName)
-                        {
-                            Console.WriteLine("This User is registered");
-                            Console.WriteLine("\npress enter key to continue");
-                            string cont = Console.ReadLine();
-                            flag = true;
-                            return;
-                        }
+                    Console.WriteLine("Enter Admin Password..");
+                    password = handelIntError(Console.ReadLine());
 
-                    }
-                    if(flag != true)
-                    {
-                        Console.WriteLine("\nEnter Password..");
-                        password = handelIntError(Console.ReadLine());
+                    Console.WriteLine("\nEnter your Name..");
+                    string name = Console.ReadLine();
 
-                        //check if username regestered before
-
-
-                        Users.Add((userName, password));
-                        userID = Users.Count;
-                        AddNewUser();
-                        UserMenu(userName);
-
-                    }
-                    
-
+                    Users.Add((Users.Count, name, email, password));
+                    AddNewUser();
+                    UserMenu(name);
                 }
-                else if (choice == 2)
-                {
-                    return;
-                }
+                
                 else
                 {
-                    Console.WriteLine("\npress enter key to continue");
+                    Console.WriteLine("\npress enter key to return to main menu..");
                     string cont = Console.ReadLine();
                 }
 
             }
             else
             {
-                UserMenu(userName);
+                Console.WriteLine("Invalid Email ..");
+                Console.WriteLine("\npress enter key to continue");
+                string cont = Console.ReadLine();
             }
+
+
         }
+
+         
 
         //Save new User name in user file
         static void AddNewUser()
@@ -821,7 +793,7 @@ namespace BasicLibrary
                 {
                     foreach (var user in Users)
                     {
-                        writer.WriteLine($"{user.UserName}|{user.password}");
+                        writer.WriteLine($"{user.UID}|{user.UserName}|{user.email}|{user.password}");
                     }
                 }
 
@@ -848,9 +820,9 @@ namespace BasicLibrary
                         while ((line = reader.ReadLine()) != null)
                         {
                             var parts = line.Split('|');
-                            if (parts.Length == 2)
+                            if (parts.Length == 4)
                             {
-                                Users.Add((parts[0],handelIntError( parts[1])));
+                                Users.Add((handelIntError(parts[0]), parts[1], parts[2], handelIntError(parts[3])));
                             }
                         }
                     }
