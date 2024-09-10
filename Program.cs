@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Text.RegularExpressions;
 using static System.Reflection.Metadata.BlobBuilder;
 // test check out
 namespace BasicLibrary
@@ -7,7 +8,7 @@ namespace BasicLibrary
     internal class Program
     {
         static List<(string BName, string BAuthor, int ID, int Qun)> Books = new List<(string BName, string BAuthor, int ID,int Qun)>();
-        static List<string> AdminUsers = new List<string>();
+        static List<(int AID,string Aname, string email,int password)>Admin = new List<(int AID, string Aname, string email, int password)>();
         static List<(string UserName, int password)> Users = new List<(string UserName, int password)>();
         static List<(int userId, int BookId)>borrowBook = new List<(int userId, int BookId)>();
         static string filePath = "C:\\Users\\Codeline User\\Desktop\\Afra\\lib.txt";
@@ -599,43 +600,48 @@ namespace BasicLibrary
         {
             int Fixedpassword = 12345;
             int password;
-            AdminUsers.Clear();
+            Admin.Clear();
             AdminsFile();
 
-            Console.WriteLine("\nEnter user name");
-            string userName = Console.ReadLine();
-           
-            
-            if (AdminUsers.Contains(userName))
+            Console.WriteLine("\nEnter your email");
+            string email = Console.ReadLine();
+            if (IsEmailValid(email))
             {
-                Console.WriteLine("\nEnter Password..");
-                password = handelIntError(Console.ReadLine());
-                if (Fixedpassword == password)
+                for (int i = 0; i < Admin.Count; i++)
                 {
-                    AdminMenu(userName);
+
+                    if (Admin[i].email.Contains(email))
+                    {
+                        Console.WriteLine("\nEnter Admin's Password..");
+                        password = handelIntError(Console.ReadLine());
+                        if (Fixedpassword == password)
+                        {
+                            AdminMenu(Admin[i].Aname);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Incorrect Admin's Password");
+                            Console.WriteLine("\npress enter key to continue");
+                            string cont = Console.ReadLine();
+                        }
+
+                        return;
+                    }
                 }
-                else
-                {
-                    Console.WriteLine("Incorrect Password");
-                    Console.WriteLine("\npress enter key to continue");
-                    string cont = Console.ReadLine();
-                }
-            }
-            else
-            {
-                Console.WriteLine("\nUser name not Registered befor..");
-                Console.WriteLine("\nDo you want to add new admin?(enter 1 or 2)\n1.yes \n2.no");
-               int choice = handelIntError(Console.ReadLine());
-                
-                if(choice == 1)
+                Console.WriteLine("\nEmail not Registered befor..");
+                Console.WriteLine("\nDo you want to add new admin?(enter 1 if yes)");
+                int choice = handelIntError(Console.ReadLine());
+                if (choice == 1)
                 {
                     Console.WriteLine("Enter Admin Password..");
                     password = handelIntError(Console.ReadLine());
                     if (Fixedpassword == password)
                     {
-                        AdminUsers.Add(userName);
+                        Console.WriteLine("\nEnter your Name..");
+                        string name = Console.ReadLine();
+                        Admin.Add((Admin.Count, name, email, password));
                         AddNewAdmin();
-                        AdminMenu(userName);
+                        AdminMenu(name);
                     }
                     else
                     {
@@ -644,11 +650,23 @@ namespace BasicLibrary
                         string cont = Console.ReadLine();
                     }
                 }
-
+                else
+                {
+                    Console.WriteLine("\npress enter key to return to main menu..");
+                    string cont = Console.ReadLine();
+                }
+                
             }
+            else
+            {
+                Console.WriteLine("Invalid Email ..");
+                Console.WriteLine("\npress enter key to continue");
+                string cont = Console.ReadLine();
+            }
+
         }
-       
-       //Load admins from admin file   
+
+        //Load admins from admin file   
         static void AdminsFile()
         {
             try
@@ -660,7 +678,11 @@ namespace BasicLibrary
                         string line;
                         while ((line = reader.ReadLine()) != null)
                         {
-                                AdminUsers.Add((line));
+                            var parts = line.Split('|');
+                            if (parts.Length == 4)
+                            {
+                                Admin.Add((handelIntError(parts[0]), parts[1], parts[2], handelIntError(parts[3])));
+                            }
                         }
                     }
                    
@@ -679,9 +701,9 @@ namespace BasicLibrary
             {
                 using (StreamWriter writer = new StreamWriter(AdminFile))
                 {
-                    foreach (string user in AdminUsers)
+                    foreach (var admin in Admin)
                     {
-                        writer.WriteLine(user);
+                        writer.WriteLine($"{admin.AID}|{admin.Aname}|{admin.email}|{admin.password}");
                     }
                 }
                 Console.WriteLine("\nAdmin saved to file successfully.");
@@ -999,6 +1021,13 @@ namespace BasicLibrary
                 }
             } while (flag == true);
             return num;
+        }
+
+        //check e_mail validation
+        static bool IsEmailValid(string email)
+        {
+            var regexEmail = new Regex(@"^[^@\s]+@[^@\s]+\.(com)$");
+            return (regexEmail.IsMatch(email));
         }
 
        
