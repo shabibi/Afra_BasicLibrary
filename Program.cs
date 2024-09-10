@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 using static System.Reflection.Metadata.BlobBuilder;
 // test check out
 namespace BasicLibrary
 {
     internal class Program
     {
-        static List<(string BName, string BAuthor, int ID, int Qun)> Books = new List<(string BName, string BAuthor, int ID,int Qun)>();
+        static List<(string BName, string BAuthor, int ID, int copies,int BorrowedCopies,int Price,string Category,int BorrowPeriod)> Books = new List<(string BName, string BAuthor, int ID, int copies, int BorrowedCopies, int Price, string Category, int BorrowPeriod)>();
         static List<(int AID,string Aname, string email,int password)>Admin = new List<(int AID, string Aname, string email, int password)>();
         static List<(int UID,string UserName,string email, int password)> Users = new List<(int UID, string UserName, string email, int password)>();
         static List<(int userId, int BookId)>borrowBook = new List<(int userId, int BookId)>();
@@ -174,8 +176,10 @@ namespace BasicLibrary
             Books.Clear();
             LoadBooksFromFile();
             ViewAllBooks();
-            int ID = 0;
 
+            int ID = 0;
+            string choice;
+            
             for (int i = 0; i < Books.Count; i++)
             {
                 if (i == Books.Count - 1)
@@ -187,42 +191,123 @@ namespace BasicLibrary
 
             Console.WriteLine("Enter Book Name");
             string name = Console.ReadLine();
-            
-            Console.WriteLine("Enter Book Author");
+
+            for (int i = 0; i < Books.Count; i++) 
+            {
+                //if book is already in the library
+                if (Books[i].BName == name)
+                {
+                    Console.WriteLine("\nThis book is already added to the Library.. ");
+                    Console.WriteLine("\nDo you want to add more copies?\n(press 1 to confirm)");
+                     choice = Console.ReadLine();
+                    if (choice == "1")
+                    {
+                        Console.WriteLine("\nEnter number of copies to add..");
+                        int copy = handelIntError(Console.ReadLine());
+                        copy += Books[i].copies;
+
+                        //display new updates of exicting book
+                        Console.WriteLine("\nNew update for " + Books[i].BName + " is \n");
+                        
+                        Console.WriteLine("{0,-10} {1,-30} {2,-25} {3,5} {4,20} {5,8} {6,-15} {7,15}",
+                                      "ID", "Title", "Author", "Copies", "Borrowed Copies", "Price", "Category", "Borrow Period");
+                        Console.WriteLine(new string('-', 125));
+
+                        Console.WriteLine("{0,-10} {1,-30} {2,-25} {3,5} {4,20} {5,8:F2} {6,-15} {7,15}", Books[i].ID, Books[i].BName, Books[i].BAuthor ,
+                            copy , Books[i].BorrowedCopies , Books[i].Price,
+                            Books[i].Category ,Books[i].BorrowPeriod);
+                        Console.WriteLine(new string('-', 125));
+                        
+
+                        Console.WriteLine("\nTo Confirm changes press 1");
+                        choice = Console.ReadLine();
+
+                        //confirm updates in number of copies
+                        if (choice == "1")
+                        {
+                            Books[i]=((Books[i].BName, Books[i].BAuthor, Books[i].ID,
+                             copy, Books[i].BorrowedCopies, Books[i].Price,
+                            Books[i].Category, Books[i].BorrowPeriod));
+                            SaveBooksToFile();
+                            Console.WriteLine("The new Copies is saved..");
+                        }
+                        else
+                        {
+                            Console.WriteLine("The change not saved..");
+                        }
+
+                    }
+                    Console.WriteLine("press enter key to continue");
+                    string cont = Console.ReadLine();
+                    return;
+                }
+            }
+            //enter data of new book to add
+            Console.WriteLine("\nEnter Book Author");
             string author = Console.ReadLine();
-            
-            Console.WriteLine("Enter Book Quantity");
+
+            Console.WriteLine("\nEnter Book Copies");
             int qun = handelIntError(Console.ReadLine());
-            
-            Books.Add((name, author, ID, qun));
-            SaveBooksToFile();
-            Console.WriteLine("Book Added Succefully");
-        
+
+            Console.WriteLine("\nEnter Book Price");
+            int price = handelIntError(Console.ReadLine());
+
+            Console.WriteLine("\nEnter Book Category");
+            string category = Console.ReadLine();
+
+            Console.WriteLine("\nEnter Book Borrow Period");
+            int BorrowPeriod = handelIntError(Console.ReadLine());
+
+            //desplay datat of new book befor confirm to add
+            Console.WriteLine("New Book data is \n");
+            Console.WriteLine("{0,-10} {1,-30} {2,-25} {3,5} {4,20} {5,8} {6,-15} {7,15}",
+                          "ID", "Title", "Author", "Copies", "Borrowed Copies", "Price", "Category", "Borrow Period");
+            Console.WriteLine(new string('-', 125));
+
+            // Data row
+            Console.WriteLine("{0,-10} {1,-30} {2,-25} {3,5} {4,20} {5,8:F2} {6,-15} {7,15}",
+                              ID, name, author, qun, "0", price, category, BorrowPeriod);
+            Console.WriteLine(new string('-', 125));
+
+            Console.WriteLine("To Confirm changes press 1");
+            choice = Console.ReadLine();
+
+            //confirm adding new book
+            if(choice == "1")
+            {
+                Books.Add((name, author, ID, qun, 0, price, category, BorrowPeriod));
+                SaveBooksToFile();
+                Console.WriteLine("Book Added Succefully");
+            }
+            else
+            {
+                Console.WriteLine("The change was saved..");
+            }
         }
 
         //Display All books available in the Library
         static void ViewAllBooks()
         {
-            Console.WriteLine("***********************************************************");
-            Console.WriteLine("\t\t Books Menu\n");
-            Console.WriteLine("***********************************************************");
-            StringBuilder sb = new StringBuilder();
+            //Console.WriteLine("***********************************************************");
+            //Console.WriteLine("\t\t Books Menu\n");
+            //Console.WriteLine("***********************************************************");
+            //StringBuilder sb = new StringBuilder();
 
-            int BookNumber = 0;
-            Console.WriteLine("ID\tTitle\tAuther\tQuantity ");
-            Console.WriteLine("-----------------------------------------------------------");
+            //int BookNumber = 0;
+            //Console.WriteLine("ID\tTitle\tAuther\tQuantity ");
+            //Console.WriteLine("-----------------------------------------------------------");
 
-            for (int i = 0; i < Books.Count; i++)
-            {             
-                BookNumber = i + 1;
-                sb.Append(Books[i].ID).Append("\t").Append(Books[i].BName).Append("\t").Append(Books[i].BAuthor).Append("\t").Append(Books[i].Qun);
-                sb.AppendLine();
+            //for (int i = 0; i < Books.Count; i++)
+            //{             
+            //    BookNumber = i + 1;
+            //    sb.Append(Books[i].ID).Append("\t").Append(Books[i].BName).Append("\t").Append(Books[i].BAuthor).Append("\t").Append(Books[i].Qun);
+            //    sb.AppendLine();
               
-                Console.WriteLine(sb.ToString());
-                sb.Clear();
+            //    Console.WriteLine(sb.ToString());
+            //    sb.Clear();
 
-            }
-            Console.WriteLine("-----------------------------------------------------------\n");
+            //}
+            //Console.WriteLine("-----------------------------------------------------------\n");
         }
 
         //Remove books from the library by entering book's id
@@ -311,9 +396,10 @@ namespace BasicLibrary
                         while ((line = reader.ReadLine()) != null)
                         {
                             var parts = line.Split('|');
-                            if (parts.Length == 4)
+                            if (parts.Length == 8)
                             {
-                                Books.Add((parts[0], parts[1], int.Parse(parts[2]), int.Parse(parts[3])));
+                                Books.Add((parts[0], parts[1], int.Parse(parts[2]), int.Parse(parts[3]),
+                                    int.Parse(parts[4]), int.Parse(parts[5]), parts[6], int.Parse(parts[7])));
                             }
                         }
                     }
@@ -335,10 +421,11 @@ namespace BasicLibrary
                 {
                     foreach (var book in Books)
                     {
-                        writer.WriteLine($"{book.BName}|{book.BAuthor}|{book.ID}|{book.Qun}");
+                        writer.WriteLine($"{book.BName}|{book.BAuthor}|{book.ID}|{book.copies}|" +
+                            $"{book.BorrowedCopies}|{book.Price}|{book.Category}|{book.BorrowPeriod}");
                     }
                 }
-       
+
             }
             catch (Exception ex)
             {
@@ -349,249 +436,249 @@ namespace BasicLibrary
         //Display menu of Editing options
         static void EditBook()
         {
-            Console.Clear();
-            Console.WriteLine("------------------------Editing Book------------------------\n");
+            //Console.Clear();
+            //Console.WriteLine("------------------------Editing Book------------------------\n");
            
-            Books.Clear();
+            //Books.Clear();
 
-            LoadBooksFromFile();
-            ViewAllBooks();
+            //LoadBooksFromFile();
+            //ViewAllBooks();
             
-            StringBuilder sb = new StringBuilder();
-            int index = -1;
-            Console.WriteLine("Enter Book ID");
-            int ID = handelIntError(Console.ReadLine());
+            //StringBuilder sb = new StringBuilder();
+            //int index = -1;
+            //Console.WriteLine("Enter Book ID");
+            //int ID = handelIntError(Console.ReadLine());
 
-            Console.Clear();
-            for (int i = 0; i < Books.Count; i++)
-            {
-                if (Books[i].ID == ID)
-                {
-                    index = i;
-                    Console.WriteLine("\nID\tTitle\tAuther\tQuantity ");
-                    Console.WriteLine("******************************************************************");
-                    Console.WriteLine(Books[i].ID + "\t" + Books[i].BName + "\t" + Books[index].BAuthor + "\t" + Books[index].Qun);
-                    Console.WriteLine("******************************************************************\n");
-                }
-            }
+            //Console.Clear();
+            //for (int i = 0; i < Books.Count; i++)
+            //{
+            //    if (Books[i].ID == ID)
+            //    {
+            //        index = i;
+            //        Console.WriteLine("\nID\tTitle\tAuther\tQuantity ");
+            //        Console.WriteLine("******************************************************************");
+            //        Console.WriteLine(Books[i].ID + "\t" + Books[i].BName + "\t" + Books[index].BAuthor + "\t" + Books[index].Qun);
+            //        Console.WriteLine("******************************************************************\n");
+            //    }
+            //}
             
-            Console.WriteLine("Choose number to edit " + Books[index].BName +" :\n");
-            Console.WriteLine("1.Book Title\n\n2.Book Auther\n\n3.Book Quantity\n");
+            //Console.WriteLine("Choose number to edit " + Books[index].BName +" :\n");
+            //Console.WriteLine("1.Book Title\n\n2.Book Auther\n\n3.Book Quantity\n");
         
-            int choice = handelIntError(Console.ReadLine());
+            //int choice = handelIntError(Console.ReadLine());
 
-            if (index != -1)
-            {
-                switch (choice)
-                {
-                    case 1:
-                        EditBookeTitle(index);
-                        break;
+            //if (index != -1)
+            //{
+            //    switch (choice)
+            //    {
+            //        case 1:
+            //            EditBookeTitle(index);
+            //            break;
 
-                    case 2:
-                        EditBookeAuthor(index);
-                        break;
+            //        case 2:
+            //            EditBookeAuthor(index);
+            //            break;
 
-                    case 3:
-                        EditBookeQuantity(index);
-                        break;
+            //        case 3:
+            //            EditBookeQuantity(index);
+            //            break;
 
-                    default:
-                        Console.WriteLine("Invaild input");
-                        break;
-                }
-            }
-            else
-            {
-                Console.WriteLine("Invalid ID");
-            }
+            //        default:
+            //            Console.WriteLine("Invaild input");
+            //            break;
+            //    }
+            //}
+            //else
+            //{
+            //    Console.WriteLine("Invalid ID");
+            //}
         }
 
         //Function for editing book title
         static void EditBookeTitle(int index)
         {
-            Console.Clear();
-            Console.WriteLine("----------------------Edit " + Books[index].BName + " Title----------------------\n");
+            //Console.Clear();
+            //Console.WriteLine("----------------------Edit " + Books[index].BName + " Title----------------------\n");
           
 
-            Console.WriteLine("Enter new title: ");
-            string title = Console.ReadLine();
+            //Console.WriteLine("Enter new title: ");
+            //string title = Console.ReadLine();
 
-            Console.WriteLine("\nThe new book edite is\n");
-            Console.WriteLine(Books[index].ID + "\t" + title + "\t" + Books[index].BAuthor + "\t" + Books[index].Qun);
-            Console.WriteLine("\nPress 1 to confirm ");
+            //Console.WriteLine("\nThe new book edite is\n");
+            //Console.WriteLine(Books[index].ID + "\t" + title + "\t" + Books[index].BAuthor + "\t" + Books[index].Qun);
+            //Console.WriteLine("\nPress 1 to confirm ");
 
-            string confirm = Console.ReadLine();
-            if (confirm == "1")
-            {
-                Books[index] = ((title, Books[index].BAuthor, Books[index].ID, Books[index].Qun));
-                SaveBooksToFile();
-                Console.WriteLine();
-                Console.WriteLine("\nThe new name is saved..");
+            //string confirm = Console.ReadLine();
+            //if (confirm == "1")
+            //{
+            //    Books[index] = ((title, Books[index].BAuthor, Books[index].ID, Books[index].Qun));
+            //    SaveBooksToFile();
+            //    Console.WriteLine();
+            //    Console.WriteLine("\nThe new name is saved..");
                 
-            }
-            else
-            {
-                Console.WriteLine("\nThe change was not saved..");
-            }
+            //}
+            //else
+            //{
+            //    Console.WriteLine("\nThe change was not saved..");
+            //}
         }
         //Function for editing book Author
         static void EditBookeAuthor(int index)
         {
-            Console.Clear();
-            Console.WriteLine("----------------------Edit " + Books[index].BName + " Auther----------------------\n");
+            //Console.Clear();
+            //Console.WriteLine("----------------------Edit " + Books[index].BName + " Auther----------------------\n");
             
-            Console.WriteLine("Enter new auther name: ");
-            string Author = Console.ReadLine();
+            //Console.WriteLine("Enter new auther name: ");
+            //string Author = Console.ReadLine();
 
-            Console.WriteLine("The new book edite is\n");
-            Console.WriteLine(Books[index].ID + "\t" + Books[index].BName + "\t" + Author + "\t" + Books[index].Qun);
-            Console.WriteLine("\nPress 1 to confirm ");
+            //Console.WriteLine("The new book edite is\n");
+            //Console.WriteLine(Books[index].ID + "\t" + Books[index].BName + "\t" + Author + "\t" + Books[index].Qun);
+            //Console.WriteLine("\nPress 1 to confirm ");
 
-            string confirm = Console.ReadLine();
-            if (confirm == "1")
-            {
-                Books[index] = ((Books[index].BName, Author, Books[index].ID, Books[index].Qun));
-                Console.WriteLine();
-                SaveBooksToFile();
-                Console.WriteLine("\nThe new auther is saved..");
+            //string confirm = Console.ReadLine();
+            //if (confirm == "1")
+            //{
+            //    Books[index] = ((Books[index].BName, Author, Books[index].ID, Books[index].Qun));
+            //    Console.WriteLine();
+            //    SaveBooksToFile();
+            //    Console.WriteLine("\nThe new auther is saved..");
                 
-            }
-            else
-            {
-                Console.WriteLine("\nThe change was not saved..");
-            }
+            //}
+            //else
+            //{
+            //    Console.WriteLine("\nThe change was not saved..");
+            //}
         }
 
         //Function for editing book Quantity
         static void EditBookeQuantity(int index)
         {
-            Console.Clear();
-            Console.WriteLine("---------------------Edit " + Books[index].BName + " Quantity---------------------\n");
+            //Console.Clear();
+            //Console.WriteLine("---------------------Edit " + Books[index].BName + " Quantity---------------------\n");
             
-            Console.WriteLine("\nEnter new Quantity : ");
-            int qun = handelIntError(Console.ReadLine());
+            //Console.WriteLine("\nEnter new Quantity : ");
+            //int qun = handelIntError(Console.ReadLine());
 
-            Console.WriteLine("\nThe new book edite is");
-            Console.WriteLine(Books[index].ID + "\t" + Books[index].BName + "\t" + Books[index].BAuthor + "\t" + qun);
-            Console.WriteLine("\nPress 1 to confirm ");
+            //Console.WriteLine("\nThe new book edite is");
+            //Console.WriteLine(Books[index].ID + "\t" + Books[index].BName + "\t" + Books[index].BAuthor + "\t" + qun);
+            //Console.WriteLine("\nPress 1 to confirm ");
 
-            string confirm = Console.ReadLine();
-            if (confirm == "1")
-            {
-                Books[index] = ((Books[index].BName, Books[index].BAuthor, Books[index].ID, qun));
-                Console.WriteLine();
-                SaveBooksToFile();
-                Console.WriteLine("The new Quantity is saved..");
+            //string confirm = Console.ReadLine();
+            //if (confirm == "1")
+            //{
+            //    Books[index] = ((Books[index].BName, Books[index].BAuthor, Books[index].ID, qun));
+            //    Console.WriteLine();
+            //    SaveBooksToFile();
+            //    Console.WriteLine("The new Quantity is saved..");
 
-            }
-            else
-            {
-                Console.WriteLine("The change was not saved..");
-            }
+            //}
+            //else
+            //{
+            //    Console.WriteLine("The change was not saved..");
+            //}
         }
 
         //Function for borroing books and update quantity
         static void BorrowBook()
         {
-            Books.Clear();
-            LoadBooksFromFile();
+            //Books.Clear();
+            //LoadBooksFromFile();
 
-            borrowBook.Clear();
-            LoadBorrowedBookFile();
+            //borrowBook.Clear();
+            //LoadBorrowedBookFile();
 
-            Console.Clear();
-            Console.WriteLine("------------------------Borrow Book------------------------\n");
-            ViewAllBooks();
+            //Console.Clear();
+            //Console.WriteLine("------------------------Borrow Book------------------------\n");
+            //ViewAllBooks();
           
-            bool flge = false;  
+            //bool flge = false;  
             
-            Console.WriteLine("Enter Book ID");
-            int ID = handelIntError(Console.ReadLine());
+            //Console.WriteLine("Enter Book ID");
+            //int ID = handelIntError(Console.ReadLine());
 
-            for (int i = 0; i < Books.Count; i++)
-            {
-                if(Books[i].ID == ID)
-                {
-                    if (Books[i].Qun> 0)
-                    {
-                        Books[i] = (Books[i].BName, Books[i].BAuthor, Books[i].ID,(Books[i].Qun-1));
-                        Console.WriteLine("\n"+Books[i].BName +" is availabe.\nPlease Return it withen 2 weeks..\n");
-                        Console.WriteLine("********************************************************************");
+            //for (int i = 0; i < Books.Count; i++)
+            //{
+            //    if(Books[i].ID == ID)
+            //    {
+            //        if (Books[i].Qun> 0)
+            //        {
+            //            Books[i] = (Books[i].BName, Books[i].BAuthor, Books[i].ID,(Books[i].Qun-1));
+            //            Console.WriteLine("\n"+Books[i].BName +" is availabe.\nPlease Return it withen 2 weeks..\n");
+            //            Console.WriteLine("********************************************************************");
 
-                        //Add borrowing book in borrrow file and save changes in lib file
-                        SaveBooksToFile();
-                        borrowBook.Add((userID, ID));
-                        BorrowedBookFile();
+            //            //Add borrowing book in borrrow file and save changes in lib file
+            //            SaveBooksToFile();
+            //            borrowBook.Add((userID, ID));
+            //            BorrowedBookFile();
 
-                        //Display suggestion list after borrowing
-                        BookSuggestion(ID);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Book not availabe");
-                    }
-                    flge = true;
-                }
+            //            //Display suggestion list after borrowing
+            //            BookSuggestion(ID);
+            //        }
+            //        else
+            //        {
+            //            Console.WriteLine("Book not availabe");
+            //        }
+            //        flge = true;
+            //    }
 
-            }
-            if (flge != true)
-            {
-                Console.WriteLine("Book not availabe");
-            }
+            //}
+            //if (flge != true)
+            //{
+            //    Console.WriteLine("Book not availabe");
+            //}
      
         }
 
         //Function for return books and apdate quantity 
         static void ReturnBook()
         {
-            Books.Clear();
-            borrowBook.Clear();
-            LoadBooksFromFile();
-            LoadBorrowedBookFile() ;
+            //Books.Clear();
+            //borrowBook.Clear();
+            //LoadBooksFromFile();
+            //LoadBorrowedBookFile() ;
 
-            Console.Clear();
-            Console.WriteLine("------------------------Return Book------------------------\n");
+            //Console.Clear();
+            //Console.WriteLine("------------------------Return Book------------------------\n");
 
-            bool flge = false;
-            int index=-1;
+            //bool flge = false;
+            //int index=-1;
          
-            //Display list of borrowing books for user
-            Console.WriteLine("\nBooks you have borrowed .. ");
-            Console.WriteLine("*****************************************************************");
-            for(int i=0; i< borrowBook.Count; i++)
-            {
-                if (borrowBook[i].userId == userID)
-                {
-                    Console.WriteLine(borrowBook[i].BookId + "\t" + Books[Books.FindIndex(book => book.ID == borrowBook[i].BookId)].BName + "\t");
-                }
-            }
-            Console.WriteLine("*****************************************************************");
-            Console.WriteLine("\nEnter Book ID");
-            int ID = handelIntError(Console.ReadLine());
-                for (int i = 0; i < borrowBook.Count; i++)
-                {
+            ////Display list of borrowing books for user
+            //Console.WriteLine("\nBooks you have borrowed .. ");
+            //Console.WriteLine("*****************************************************************");
+            //for(int i=0; i< borrowBook.Count; i++)
+            //{
+            //    if (borrowBook[i].userId == userID)
+            //    {
+            //        Console.WriteLine(borrowBook[i].BookId + "\t" + Books[Books.FindIndex(book => book.ID == borrowBook[i].BookId)].BName + "\t");
+            //    }
+            //}
+            //Console.WriteLine("*****************************************************************");
+            //Console.WriteLine("\nEnter Book ID");
+            //int ID = handelIntError(Console.ReadLine());
+            //    for (int i = 0; i < borrowBook.Count; i++)
+            //    {
 
-                    if ((borrowBook[i].BookId == ID) && (borrowBook[i].userId == userID))
-                    {
-                        index = Books.FindIndex(book => book.ID == borrowBook[i].BookId);
-                        Books[index] = (Books[index].BName, Books[index].BAuthor, Books[index].ID, (Books[index].Qun + 1));
-                        Console.WriteLine("\n" + Books[index].BName + " returned to the library\n\nThank you.");
+            //        if ((borrowBook[i].BookId == ID) && (borrowBook[i].userId == userID))
+            //        {
+            //            index = Books.FindIndex(book => book.ID == borrowBook[i].BookId);
+            //            Books[index] = (Books[index].BName, Books[index].BAuthor, Books[index].ID, (Books[index].Qun + 1));
+            //            Console.WriteLine("\n" + Books[index].BName + " returned to the library\n\nThank you.");
 
-                        borrowBook.Remove((userID, ID));
-                        BorrowedBookFile();
-                        SaveBooksToFile();
-                        flge = true;
-                    }
+            //            borrowBook.Remove((userID, ID));
+            //            BorrowedBookFile();
+            //            SaveBooksToFile();
+            //            flge = true;
+            //        }
                     
                 
                 
-                 }
+            //     }
 
-            if (flge != true)
-            {
-                Console.WriteLine("\nBook not exist..");
-            }
+            //if (flge != true)
+            //{
+            //    Console.WriteLine("\nBook not exist..");
+            //}
 
         }
 
@@ -890,40 +977,40 @@ namespace BasicLibrary
         //Desplay Report to admin
         static void Report()
         {
-            Books.Clear();
+            //Books.Clear();
             
-            LoadBorrowedBookFile();
-            LoadBooksFromFile();
-            int booksInLibrary = 0;
+            //LoadBorrowedBookFile();
+            //LoadBooksFromFile();
+            //int booksInLibrary = 0;
             
-            for (int i = 0; i < Books.Count; i++)
-            {
-                booksInLibrary += Books[i].Qun;
-            }
+            //for (int i = 0; i < Books.Count; i++)
+            //{
+            //    booksInLibrary += Books[i].Qun;
+            //}
 
-            int[] popularBook = new int[Books.Count];
-            for (int i = 0; i < borrowBook.Count; i++) 
-            {
-                for (int j = 0; j < popularBook.Length; j++)
-                {
-                    if(borrowBook[i].BookId == j)
-                    {
-                        popularBook[j]++;
-                    }
-                }
+            //int[] popularBook = new int[Books.Count];
+            //for (int i = 0; i < borrowBook.Count; i++) 
+            //{
+            //    for (int j = 0; j < popularBook.Length; j++)
+            //    {
+            //        if(borrowBook[i].BookId == j)
+            //        {
+            //            popularBook[j]++;
+            //        }
+            //    }
                 
-            }
+            //}
 
-            Console.WriteLine("Number of Borroed Books is : " + borrowBook.Count);
-            Console.WriteLine("Number of Books in Library is : " + booksInLibrary);
-            Console.WriteLine("Most borrowed book : " );
-            for (int i = 0;i < popularBook.Length; i++)
-            {
-                if (popularBook[i] == popularBook.Max())
-                {
-                    Console.WriteLine(Books[i].BName);
-                }
-            }
+            //Console.WriteLine("Number of Borroed Books is : " + borrowBook.Count);
+            //Console.WriteLine("Number of Books in Library is : " + booksInLibrary);
+            //Console.WriteLine("Most borrowed book : " );
+            //for (int i = 0;i < popularBook.Length; i++)
+            //{
+            //    if (popularBook[i] == popularBook.Max())
+            //    {
+            //        Console.WriteLine(Books[i].BName);
+            //    }
+            //}
 
         }
 
