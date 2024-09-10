@@ -173,8 +173,17 @@ namespace BasicLibrary
             Books.Clear();
             LoadBooksFromFile();
             ViewAllBooks();
+            int ID = 0;
 
-            int  ID = Books.Count;
+            for (int i = 0; i < Books.Count; i++)
+            {
+                if (i == Books.Count - 1)
+                {
+                    ID = Books[i].ID + 1;
+                }
+
+            }
+
             Console.WriteLine("Enter Book Name");
             string name = Console.ReadLine();
             
