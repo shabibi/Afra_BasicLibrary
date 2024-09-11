@@ -669,20 +669,20 @@ namespace BasicLibrary
             LoadBorrowedBookFile();
 
             Console.Clear();
-            Console.WriteLine(new string('*', 140));
+            Console.WriteLine(new string('*', 120));
             Console.WriteLine("\t\t\t\t\t\t Return Book\n");
-            Console.WriteLine(new string('*', 140));
+            Console.WriteLine(new string('*', 120));
 
             bool flge = false;
             int index = -1;
 
             //Display list of borrowing books for user
             Console.WriteLine("\nBooks you have borrowed .. ");
-            Console.WriteLine(new string('*', 140));
+            Console.WriteLine(new string('*', 120));
             Console.WriteLine("{0,-10} {1,-30} {2,-12} {3,-12}", "Book ID", "Book Name", "Borrow Date", "Return Date");
             for (int i = 0; i < borrowBook.Count; i++)
             {
-                if (borrowBook[i].UId == userID)
+                if ((borrowBook[i].UId == userID) && (borrowBook[i].isReturn))
                 {
                     index = Books.FindIndex(book => book.ID == borrowBook[i].BId);
                     
@@ -690,13 +690,13 @@ namespace BasicLibrary
                         borrowBook[i].Bdate.ToString("yyyy-MM-dd"), borrowBook[i].Rdate.ToString("yyyy-MM-dd"));
                 }
             }
-            Console.WriteLine(new string('*', 140));
+            Console.WriteLine(new string('*', 120));
             Console.WriteLine("\nEnter Book ID");
             int ID = handelIntError(Console.ReadLine());
             for (int i = 0; i < borrowBook.Count; i++)
             {
 
-                if ((borrowBook[i].BId == ID) && (borrowBook[i].UId == userID))
+                if ((borrowBook[i].BId == ID) && (borrowBook[i].UId == userID) && (borrowBook[i].isReturn))
                 {
                     Console.WriteLine("\n" + Books[index].BName + " returned to the library\n\nThank you.");
                     Console.WriteLine("How would rate the book out of 10 ?");
