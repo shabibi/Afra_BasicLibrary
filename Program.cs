@@ -209,14 +209,14 @@ namespace BasicLibrary
                         //display new updates of exicting book
                         Console.WriteLine("\nNew update for " + Books[i].BName + " is \n");
                         
-                        Console.WriteLine("{0,-10} {1,-30} {2,-25} {3,5} {4,20} {5,8} {6,-15} {7,15}",
+                        Console.WriteLine("{0,-10} {1,-30} {2,-25} {3,5} {4,20} {5,10} {6,15} {7,15}",
                                       "ID", "Title", "Author", "Copies", "Borrowed Copies", "Price", "Category", "Borrow Period");
-                        Console.WriteLine(new string('-', 125));
+                        Console.WriteLine(new string('-', 140));
 
-                        Console.WriteLine("{0,-10} {1,-30} {2,-25} {3,5} {4,20} {5,8:F2} {6,-15} {7,15}", Books[i].ID, Books[i].BName, Books[i].BAuthor ,
+                        Console.WriteLine("{0,-10} {1,-30} {2,-25} {3,5} {4,20} {5,10:F2} {6,15} {7,15}", Books[i].ID, Books[i].BName, Books[i].BAuthor ,
                             copy , Books[i].BorrowedCopies , Books[i].Price,
                             Books[i].Category ,Books[i].BorrowPeriod);
-                        Console.WriteLine(new string('-', 125));
+                        Console.WriteLine(new string('-', 140));
                         
 
                         Console.WriteLine("\nTo Confirm changes press 1");
@@ -260,14 +260,14 @@ namespace BasicLibrary
 
             //desplay datat of new book befor confirm to add
             Console.WriteLine("New Book data is \n");
-            Console.WriteLine("{0,-10} {1,-30} {2,-25} {3,5} {4,20} {5,8} {6,-15} {7,15}",
+            Console.WriteLine("{0,-10} {1,-30} {2,-25} {3,5} {4,20} {5,10} {6,15} {7,15}",
                           "ID", "Title", "Author", "Copies", "Borrowed Copies", "Price", "Category", "Borrow Period");
-            Console.WriteLine(new string('-', 125));
+            Console.WriteLine(new string('-', 140));
 
             // Data row
-            Console.WriteLine("{0,-10} {1,-30} {2,-25} {3,5} {4,20} {5,8:F2} {6,-15} {7,15}",
+            Console.WriteLine("{0,-10} {1,-30} {2,-25} {3,5} {4,20} {5,10:F2} {6,15} {7,15}",
                               ID, name, author, qun, "0", price, category, BorrowPeriod);
-            Console.WriteLine(new string('-', 125));
+            Console.WriteLine(new string('-', 140));
 
             Console.WriteLine("To Confirm changes press 1");
             choice = Console.ReadLine();
@@ -288,26 +288,25 @@ namespace BasicLibrary
         //Display All books available in the Library
         static void ViewAllBooks()
         {
-            //Console.WriteLine("***********************************************************");
-            //Console.WriteLine("\t\t Books Menu\n");
-            //Console.WriteLine("***********************************************************");
-            //StringBuilder sb = new StringBuilder();
+            Console.WriteLine(new string('*', 140));
+            Console.WriteLine("\t\t\t\t\t\t Books Menu\n");
+            Console.WriteLine(new string('*', 140));
+            StringBuilder sb = new StringBuilder();
 
-            //int BookNumber = 0;
-            //Console.WriteLine("ID\tTitle\tAuther\tQuantity ");
-            //Console.WriteLine("-----------------------------------------------------------");
+            
+            Console.WriteLine("\n{0,-10} {1,-30} {2,-25} {3,5} {4,20} {5,10} {6,15} {7,15}",
+                              "ID", "Title", "Author", "Copies", "Borrowed Copies", "Price", "Category", "Borrow Period");
+            Console.WriteLine(new string('-', 140));
 
-            //for (int i = 0; i < Books.Count; i++)
-            //{             
-            //    BookNumber = i + 1;
-            //    sb.Append(Books[i].ID).Append("\t").Append(Books[i].BName).Append("\t").Append(Books[i].BAuthor).Append("\t").Append(Books[i].Qun);
-            //    sb.AppendLine();
-              
-            //    Console.WriteLine(sb.ToString());
-            //    sb.Clear();
 
-            //}
-            //Console.WriteLine("-----------------------------------------------------------\n");
+            for (int i = 0; i < Books.Count; i++)
+            {
+                Console.WriteLine("{0,-10} {1,-30} {2,-25} {3,5} {4,20} {5,10:F2} {6,15} {7,15}", Books[i].ID, Books[i].BName, Books[i].BAuthor,
+                    Books[i].copies, Books[i].BorrowedCopies, Books[i].Price,
+                    Books[i].Category, Books[i].BorrowPeriod);
+            }
+            Console.WriteLine(new string('-', 140));
+
         }
 
         //Remove books from the library by entering book's id
