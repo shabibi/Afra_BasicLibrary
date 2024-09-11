@@ -407,8 +407,8 @@ namespace BasicLibrary
                             var parts = line.Split('|');
                             if (parts.Length == 8)
                             {
-                                Books.Add((int.Parse(parts[0]), parts[1], parts[2],  int.Parse(parts[3]),
-                                    int.Parse(parts[4]), double.Parse(parts[5]), parts[6], int.Parse(parts[7])));
+                                Books.Add((int.Parse(parts[0]), parts[1].Trim(), parts[2].Trim(),  int.Parse(parts[3]),
+                                    int.Parse(parts[4]), double.Parse(parts[5]), parts[6].Trim(), int.Parse(parts[7])));
                             }
                         }
                     }
@@ -615,31 +615,70 @@ namespace BasicLibrary
                 {
                     if (Books[i].copies > 0)
                     {
-                        for(int j = 0; j < borrowBook.Count; j++)
+                        for (int j = 0; j < borrowBook.Count; j++)
                         {
-                            if (borrowBook[j].UId == userID && borrowBook[j].BId == ID && !borrowBook[i].isReturn)
+                            if ((borrowBook[j].UId == userID) && (borrowBook[j].BId == ID))
                             {
-                                Console.WriteLine("You are still borrowed this book ..");
-                                Console.WriteLine("Do you want to borrow another book\n 1.yes\n 2.No");
-                                choice = Console.ReadLine();
-                                if (choice == "1")
+
+                                if (borrowBook[j].isReturn == false)
                                 {
-                                    BorrowBook();
-                                }
-                                else if (choice == "2")
-                                {
-                                    UserMenu(Users[userID].UserName);
+                                    Console.WriteLine("You are still borrowed this book ..");
+                                    Console.WriteLine("Do you want to borrow another book\n 1.yes\n 2.No");
+                                    choice = Console.ReadLine();
+                                    if (choice == "1")
+                                    {
+                                        BorrowBook();
+                                    }
+                                    else if (choice == "2")
+                                    {
+                                        UserMenu(Users[userID].UserName);
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Sorry your choice was wrong");
+                                        return;
+                                    }
+
                                 }
                                 else
                                 {
-                                    Console.WriteLine("Sorry your choice was wrong");
-                                    return;
+                                    Books[i] = (Books[i].ID, Books[i].BName, Books[i].BAuthor, (Books[i].copies - 1), (Books[i].BorrowedCopies + 1)
+                                         , Books[i].Price, Books[i].Category, Books[i].BorrowPeriod);
+                                    Console.WriteLine("\n" + Books[i].BName + " is availabe.");
+                                    Console.WriteLine("********************************************************************");
+
+                                    //confirm borrowing..
+                                    Console.WriteLine("To confirm book borrowing press 1 ..");
+                                    choice = Console.ReadLine();
+
+                                    if (choice == "1")
+                                    {
+                                        DateTime today = DateTime.Today;
+
+                                        DateTime returnD = today.AddDays(Books[i].BorrowPeriod);
+                                        DateTime? Adate = null;
+                                        int? rate = null;
+                                        //Add borrowing book in borrrow file and save changes in lib file
+                                        SaveBooksToFile();
+
+                                        borrowBook[i] = ((userID, ID, today, returnD, Adate, rate, false));
+                                        BorrowedBookFile();
+                                        Console.WriteLine("Thank you..\nPlease Return it withen " + Books[i].BorrowPeriod + " days..\n");
+
+                                        //Display suggestion list after borrowing
+                                        BookSuggestion(ID);
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("\tThank You..");
+                                        return;
+                                    }
+
                                 }
                             }
                         }
-
-                        Books[i] = (Books[i].ID, Books[i].BName, Books[i].BAuthor,  (Books[i].copies - 1), (Books[i].BorrowedCopies + 1)
-                            ,Books[i].Price, Books[i].Category, Books[i].BorrowPeriod);
+                        Books[i] = (Books[i].ID, Books[i].BName, Books[i].BAuthor, (Books[i].copies - 1), (Books[i].BorrowedCopies + 1)
+                           , Books[i].Price, Books[i].Category, Books[i].BorrowPeriod);
                         Console.WriteLine("\n" + Books[i].BName + " is availabe.");
                         Console.WriteLine("********************************************************************");
 
@@ -656,7 +695,8 @@ namespace BasicLibrary
                             int? rate = null;
                             //Add borrowing book in borrrow file and save changes in lib file
                             SaveBooksToFile();
-                            borrowBook.Add((userID, ID, today, returnD,Adate , rate, false));
+
+                            borrowBook.Add((userID, ID, today, returnD, Adate, rate, false));
                             BorrowedBookFile();
                             Console.WriteLine("Thank you..\nPlease Return it withen " + Books[i].BorrowPeriod + " days..\n");
 
@@ -666,17 +706,14 @@ namespace BasicLibrary
                         else
                         {
                             Console.WriteLine("\tThank You..");
+                            return;
                         }
-                       
-                    }
-                    else
-                    {
-                        Console.WriteLine("Book not availabe");
                     }
                     flge = true;
-                }
 
+                }
             }
+
             if (flge != true)
             {
                 Console.WriteLine("Book not availabe");
