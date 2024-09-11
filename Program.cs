@@ -430,6 +430,7 @@ namespace BasicLibrary
                 {
                     foreach (var book in Books)
                     {
+
                         writer.WriteLine($"{book.ID}|{book.BName}|{book.BAuthor}|{book.copies}|" +
                             $"{book.BorrowedCopies}|{book.Price}|{book.Category}|{book.BorrowPeriod}");
                     }
@@ -441,6 +442,7 @@ namespace BasicLibrary
                 Console.WriteLine($"Error saving to file: {ex.Message}");
             }
         }
+
 
         //Display menu of Editing options
         static void EditBook()
@@ -603,7 +605,7 @@ namespace BasicLibrary
             ViewAllBooks();
 
             bool flge = false;
-
+            string choice;
             Console.WriteLine("\nEnter Book ID");
             int ID = handelIntError(Console.ReadLine());
 
@@ -613,6 +615,29 @@ namespace BasicLibrary
                 {
                     if (Books[i].copies > 0)
                     {
+                        for(int j = 0; j < borrowBook.Count; j++)
+                        {
+                            if (borrowBook[j].UId == userID && borrowBook[j].BId == ID && !borrowBook[i].isReturn)
+                            {
+                                Console.WriteLine("You are still borrowed this book ..");
+                                Console.WriteLine("Do you want to borrow another book\n 1.yes\n 2.No");
+                                choice = Console.ReadLine();
+                                if (choice == "1")
+                                {
+                                    BorrowBook();
+                                }
+                                else if (choice == "2")
+                                {
+                                    UserMenu(Users[userID].UserName);
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Sorry your choice was wrong");
+                                    return;
+                                }
+                            }
+                        }
+
                         Books[i] = (Books[i].ID, Books[i].BName, Books[i].BAuthor,  (Books[i].copies - 1), (Books[i].BorrowedCopies + 1)
                             ,Books[i].Price, Books[i].Category, Books[i].BorrowPeriod);
                         Console.WriteLine("\n" + Books[i].BName + " is availabe.");
@@ -620,7 +645,7 @@ namespace BasicLibrary
 
                         //confirm borrowing..
                         Console.WriteLine("To confirm book borrowing press 1 ..");
-                        string choice = Console.ReadLine();
+                        choice = Console.ReadLine();
 
                         if (choice == "1")
                         {
@@ -974,8 +999,10 @@ namespace BasicLibrary
                 {
                     foreach (var book in borrowBook)
                     {
+
                         string actualRD = book.ActualRD.HasValue ? book.ActualRD.Value.ToString("yyyy-MM-dd") : "N/A";
                         string rating = book.Rating.HasValue ? book.Rating.Value.ToString() : "N/A";
+
                         writer.WriteLine($"{book.UId}|{book.BId}|{book.Bdate.ToString("yyyy-MM-dd")}" +
                             $"|{book.Rdate.ToString("yyyy-MM-dd")}|{actualRD}|{rating}|{book.isReturn}");
 
