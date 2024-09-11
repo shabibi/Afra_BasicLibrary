@@ -682,7 +682,7 @@ namespace BasicLibrary
             Console.WriteLine("{0,-10} {1,-30} {2,-12} {3,-12}", "Book ID", "Book Name", "Borrow Date", "Return Date");
             for (int i = 0; i < borrowBook.Count; i++)
             {
-                if ((borrowBook[i].UId == userID) && (borrowBook[i].isReturn))
+                if ((borrowBook[i].UId == userID) && (!borrowBook[i].isReturn))
                 {
                     index = Books.FindIndex(book => book.ID == borrowBook[i].BId);
                     
@@ -696,7 +696,7 @@ namespace BasicLibrary
             for (int i = 0; i < borrowBook.Count; i++)
             {
 
-                if ((borrowBook[i].BId == ID) && (borrowBook[i].UId == userID) && (borrowBook[i].isReturn))
+                if ((borrowBook[i].BId == ID) && (borrowBook[i].UId == userID) && (!borrowBook[i].isReturn))
                 {
                     Console.WriteLine("\n" + Books[index].BName + " returned to the library\n\nThank you.");
                     Console.WriteLine("How would rate the book out of 10 ?");
@@ -974,7 +974,10 @@ namespace BasicLibrary
                 {
                     foreach (var book in borrowBook)
                     {
-                        writer.WriteLine($"{book.UId}|{book.BId}|{book.Bdate.ToString("yyyy-MM-dd")}|{book.Rdate.ToString("yyyy-MM-dd")}|{book.ActualRD}|{book.Rating}|{book.isReturn}");
+                        string actualRD = book.ActualRD.HasValue ? book.ActualRD.Value.ToString("yyyy-MM-dd") : "N/A";
+                        string rating = book.Rating.HasValue ? book.Rating.Value.ToString() : "N/A";
+                        writer.WriteLine($"{book.UId}|{book.BId}|{book.Bdate.ToString("yyyy-MM-dd")}" +
+                            $"|{book.Rdate.ToString("yyyy-MM-dd")}|{actualRD}|{rating}|{book.isReturn}");
 
                     }
                 }
