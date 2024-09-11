@@ -19,10 +19,14 @@ namespace BasicLibrary
         static List<(int UId, int BId,DateTime Bdate, DateTime Rdate, DateTime? ActualRD,int? Rating,bool isReturn)>borrowBook
             = new List<(int UId, int BId, DateTime Bdate, DateTime Rdate, DateTime? ActualRD, int? Rating, bool isReturn)>();
 
+        static List<(int CID, string CName, string NOFBooks)> Categories = new List<(int CID, string CName, string NOFBooks)>();
+
         static string filePath = "C:\\Users\\Codeline User\\Desktop\\Afra\\lib.txt";
         static string AdminFile = "C:\\Users\\Codeline User\\Desktop\\Afra\\Admin.txt";
         static string UsersFile = "C:\\Users\\Codeline User\\Desktop\\Afra\\Users.txt";
         static string BorrowFile = "C:\\Users\\Codeline User\\Desktop\\Afra\\Borrow.txt";
+        static string CategoriesFile = "C:\\Users\\Codeline User\\Desktop\\Afra\\CategoriesFile.txt";
+
         static int userID = 0;
 
         static void Main(string[] args)
@@ -1213,7 +1217,54 @@ namespace BasicLibrary
             return (regexEmail.IsMatch(email));
         }
 
+        //Read Category file
+        static void LoadFromCategoryFile()
+        {
+            try
+            {
+                if (File.Exists(CategoriesFile))
+                {
+                    using (StreamReader reader = new StreamReader(CategoriesFile))
+                    {
+                        string line;
+                        while ((line = reader.ReadLine()) != null)
+                        {
+                            var parts = line.Split('|');
+                            if (parts.Length == 3)
+                            {
+                                Categories.Add((int.Parse(parts[0]), parts[1].Trim(), parts[2].Trim()));
+                            }
+                        }
+                    }
 
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading from file: {ex.Message}");
+            }
+        }
+
+        //write to Categories file
+        static void SaveCategoriesToFile()
+        {
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(filePath))
+                {
+                    foreach (var catg in Categories)
+                    {
+
+                        writer.WriteLine($"{catg.CID}|{catg.CName}|{catg.GetType}");
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving to file: {ex.Message}");
+            }
+        }
         static int? ParseInt(string value)
         {
             return int.TryParse(value, out var result) ? result : (int?)null;
