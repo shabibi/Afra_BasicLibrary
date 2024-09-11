@@ -661,12 +661,13 @@ namespace BasicLibrary
                                         //Add borrowing book in borrrow file and save changes in lib file
                                         SaveBooksToFile();
 
-                                        borrowBook[i] = ((userID, ID, today, returnD, Adate, rate, false));
+                                        borrowBook[j] = ((userID, ID, today, returnD, Adate, rate, false));
                                         BorrowedBookFile();
                                         Console.WriteLine("Thank you..\nPlease Return it withen " + Books[i].BorrowPeriod + " days..\n");
 
                                         //Display suggestion list after borrowing
                                         BookSuggestion(ID);
+                                        return;
                                     }
                                     else
                                     {
@@ -708,10 +709,15 @@ namespace BasicLibrary
                             Console.WriteLine("\tThank You..");
                             return;
                         }
+                        flge = true;
                     }
-                    flge = true;
-
+                    else 
+                    {
+                        Console.WriteLine("Book not availabe for Borroing.");
+                        flge = true;
+                    }
                 }
+                
             }
 
             if (flge != true)
@@ -1070,15 +1076,16 @@ namespace BasicLibrary
                             if (parts.Length == 7)
                             {
                                 // Handle each part with default values if parsing fails
-                                int bId = int.Parse(parts[0]);
-                                int userId = int.Parse(parts[1]);
+                                
+                                int userId = int.Parse(parts[0]);
+                                int bId = int.Parse(parts[1]);
                                 DateTime borrowDate = DateTime.Parse(parts[2]);
                                 DateTime returnDate = DateTime.Parse(parts[3]);
                                 DateTime? dueDate = ParseDate(parts[4]);
                                 int? fine = ParseInt(parts[5]);
                                 bool isReturned = bool.Parse(parts[6]);
 
-                                borrowBook.Add((bId, userId, borrowDate, returnDate, dueDate, fine, isReturned));
+                                borrowBook.Add((userId, bId,  borrowDate, returnDate, dueDate, fine, isReturned));
                             }
                         }
                     }
