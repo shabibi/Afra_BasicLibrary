@@ -480,146 +480,159 @@ namespace BasicLibrary
         //Display menu of Editing options
         static void EditBook()
         {
+            Console.Clear();
+            Console.WriteLine(new string('*', 140));
+            Console.WriteLine("\t\t\t\t\t\t Editing Book\n");
+            Books.Clear();
+
+            LoadBooksFromFile();
+            ViewAllBooks();
+
+            StringBuilder sb = new StringBuilder();
+            int index = -1;
+            Console.WriteLine("Enter Book ID");
+            int ID = handelIntError(Console.ReadLine());
+
             //Console.Clear();
-            //Console.WriteLine("------------------------Editing Book------------------------\n");
-           
-            //Books.Clear();
+            Console.WriteLine("{0,-5} {1,-30} {2,-25} {3,8}", "ID", "Title", "Author", "Quantity");
+            Console.WriteLine(new string('*', 68)); 
+            for (int i = 0; i < Books.Count; i++)
+            {
+                if (Books[i].ID == ID)
+                {
+                    index = i;
+                    // Display the book list in a formatted view
+                   
+                        Console.WriteLine("{0,-5} {1,-30} {2,-25} {3,8}",
+                            Books[i].ID,
+                            Books[i].BName,
+                            Books[i].BAuthor,
+                            Books[i].copies);
+                   
+                }
+            }
+            Console.WriteLine(new string('*', 68)); // Divider line at the end
 
-            //LoadBooksFromFile();
-            //ViewAllBooks();
-            
-            //StringBuilder sb = new StringBuilder();
-            //int index = -1;
-            //Console.WriteLine("Enter Book ID");
-            //int ID = handelIntError(Console.ReadLine());
 
-            //Console.Clear();
-            //for (int i = 0; i < Books.Count; i++)
-            //{
-            //    if (Books[i].ID == ID)
-            //    {
-            //        index = i;
-            //        Console.WriteLine("\nID\tTitle\tAuther\tQuantity ");
-            //        Console.WriteLine("******************************************************************");
-            //        Console.WriteLine(Books[i].ID + "\t" + Books[i].BName + "\t" + Books[index].BAuthor + "\t" + Books[index].Qun);
-            //        Console.WriteLine("******************************************************************\n");
-            //    }
-            //}
-            
-            //Console.WriteLine("Choose number to edit " + Books[index].BName +" :\n");
-            //Console.WriteLine("1.Book Title\n\n2.Book Auther\n\n3.Book Quantity\n");
-        
-            //int choice = handelIntError(Console.ReadLine());
+            Console.WriteLine("Choose number to edit " + Books[index].BName + " :\n");
+            Console.WriteLine("1.Book Title\n\n2.Book Auther\n\n3.Book Quantity\n");
 
-            //if (index != -1)
-            //{
-            //    switch (choice)
-            //    {
-            //        case 1:
-            //            EditBookeTitle(index);
-            //            break;
+            int choice = handelIntError(Console.ReadLine());
 
-            //        case 2:
-            //            EditBookeAuthor(index);
-            //            break;
+            if (index != -1)
+            {
+                switch (choice)
+                {
+                    case 1:
+                        EditBookeTitle(index);
+                        break;
 
-            //        case 3:
-            //            EditBookeQuantity(index);
-            //            break;
+                    case 2:
+                        EditBookeAuthor(index);
+                        break;
 
-            //        default:
-            //            Console.WriteLine("Invaild input");
-            //            break;
-            //    }
-            //}
-            //else
-            //{
-            //    Console.WriteLine("Invalid ID");
-            //}
+                    case 3:
+                        EditBookeQuantity(index);
+                        break;
+
+                    default:
+                        Console.WriteLine("Invaild input");
+                        break;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Invalid ID");
+            }
         }
 
         //Function for editing book title
         static void EditBookeTitle(int index)
         {
-            //Console.Clear();
-            //Console.WriteLine("----------------------Edit " + Books[index].BName + " Title----------------------\n");
-          
+            Console.Clear();
+            Console.WriteLine("----------------------Edit " + Books[index].BName + " Title----------------------\n");
 
-            //Console.WriteLine("Enter new title: ");
-            //string title = Console.ReadLine();
 
-            //Console.WriteLine("\nThe new book edite is\n");
-            //Console.WriteLine(Books[index].ID + "\t" + title + "\t" + Books[index].BAuthor + "\t" + Books[index].Qun);
-            //Console.WriteLine("\nPress 1 to confirm ");
+            Console.WriteLine("Enter new title: ");
+            string title = Console.ReadLine();
 
-            //string confirm = Console.ReadLine();
-            //if (confirm == "1")
-            //{
-            //    Books[index] = ((title, Books[index].BAuthor, Books[index].ID, Books[index].Qun));
-            //    SaveBooksToFile();
-            //    Console.WriteLine();
-            //    Console.WriteLine("\nThe new name is saved..");
-                
-            //}
-            //else
-            //{
-            //    Console.WriteLine("\nThe change was not saved..");
-            //}
+            Console.WriteLine("\nThe new book edite is\n");
+            Console.WriteLine(Books[index].ID + "\t" + title + "\t" + Books[index].BAuthor + "\t" + Books[index].copies);
+            Console.WriteLine("\nPress 1 to confirm ");
+
+            string confirm = Console.ReadLine();
+            if (confirm == "1")
+            {
+                Books[index] = ((Books[index].ID, title, Books[index].BAuthor, Books[index].copies, Books[index].BorrowedCopies, 
+                    Books[index].Price, Books[index].Category, Books[index].BorrowPeriod));
+                SaveBooksToFile();
+                Console.WriteLine();
+                Console.WriteLine("\nThe new name is saved..");
+
+            }
+            else
+            {
+                Console.WriteLine("\nThe change was not saved..");
+            }
         }
         //Function for editing book Author
         static void EditBookeAuthor(int index)
         {
-            //Console.Clear();
-            //Console.WriteLine("----------------------Edit " + Books[index].BName + " Auther----------------------\n");
-            
-            //Console.WriteLine("Enter new auther name: ");
-            //string Author = Console.ReadLine();
+            Console.Clear();
+            Console.WriteLine("----------------------Edit " + Books[index].BName + " Auther----------------------\n");
 
-            //Console.WriteLine("The new book edite is\n");
-            //Console.WriteLine(Books[index].ID + "\t" + Books[index].BName + "\t" + Author + "\t" + Books[index].Qun);
-            //Console.WriteLine("\nPress 1 to confirm ");
+            Console.WriteLine("Enter new auther name: ");
+            string Author = Console.ReadLine();
 
-            //string confirm = Console.ReadLine();
-            //if (confirm == "1")
-            //{
-            //    Books[index] = ((Books[index].BName, Author, Books[index].ID, Books[index].Qun));
-            //    Console.WriteLine();
-            //    SaveBooksToFile();
-            //    Console.WriteLine("\nThe new auther is saved..");
-                
-            //}
-            //else
-            //{
-            //    Console.WriteLine("\nThe change was not saved..");
-            //}
+            Console.WriteLine("The new book edite is\n");
+            Console.WriteLine(Books[index].ID + "\t" + Books[index].BName + "\t" + Author + "\t" + Books[index].copies);
+            Console.WriteLine("\nPress 1 to confirm ");
+
+            string confirm = Console.ReadLine();
+            if (confirm == "1")
+            {
+                Books[index] = ((Books[index].ID, Books[index].BName, Author, Books[index].copies, Books[index].BorrowedCopies,
+                    Books[index].Price, Books[index].Category, Books[index].BorrowPeriod));
+               
+                Console.WriteLine();
+                SaveBooksToFile();
+                Console.WriteLine("\nThe new auther is saved..");
+
+            }
+            else
+            {
+                Console.WriteLine("\nThe change was not saved..");
+            }
         }
 
         //Function for editing book Quantity
         static void EditBookeQuantity(int index)
         {
-            //Console.Clear();
-            //Console.WriteLine("---------------------Edit " + Books[index].BName + " Quantity---------------------\n");
-            
-            //Console.WriteLine("\nEnter new Quantity : ");
-            //int qun = handelIntError(Console.ReadLine());
+            Console.Clear();
+            Console.WriteLine("---------------------Edit " + Books[index].BName + " Quantity---------------------\n");
 
-            //Console.WriteLine("\nThe new book edite is");
-            //Console.WriteLine(Books[index].ID + "\t" + Books[index].BName + "\t" + Books[index].BAuthor + "\t" + qun);
-            //Console.WriteLine("\nPress 1 to confirm ");
+            Console.WriteLine("\nEnter new Quantity : ");
+            int qun = handelIntError(Console.ReadLine());
 
-            //string confirm = Console.ReadLine();
-            //if (confirm == "1")
-            //{
-            //    Books[index] = ((Books[index].BName, Books[index].BAuthor, Books[index].ID, qun));
-            //    Console.WriteLine();
-            //    SaveBooksToFile();
-            //    Console.WriteLine("The new Quantity is saved..");
+            Console.WriteLine("\nThe new book edite is");
+            Console.WriteLine(Books[index].ID + "\t" + Books[index].BName + "\t" + Books[index].BAuthor + "\t" + qun);
+            Console.WriteLine("\nPress 1 to confirm ");
 
-            //}
-            //else
-            //{
-            //    Console.WriteLine("The change was not saved..");
-            //}
+            string confirm = Console.ReadLine();
+            if (confirm == "1")
+            {
+                Books[index] = ((Books[index].ID, Books[index].BName, Books[index].BAuthor, qun, Books[index].BorrowedCopies,
+                    Books[index].Price, Books[index].Category, Books[index].BorrowPeriod));
+               
+                Console.WriteLine();
+                SaveBooksToFile();
+                Console.WriteLine("The new Quantity is saved..");
+
+            }
+            else
+            {
+                Console.WriteLine("The change was not saved..");
+            }
         }
 
         //Function for borroing books and update quantity
