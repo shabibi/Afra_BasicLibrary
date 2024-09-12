@@ -1134,40 +1134,74 @@ namespace BasicLibrary
         //Desplay Report to admin
         static void Report()
         {
-            //Books.Clear();
-            
-            //LoadBorrowedBookFile();
-            //LoadBooksFromFile();
-            //int booksInLibrary = 0;
-            
-            //for (int i = 0; i < Books.Count; i++)
-            //{
-            //    booksInLibrary += Books[i].Qun;
-            //}
+            Console.Clear();
+            Console.WriteLine(new string('*', 120));
+            Console.WriteLine("\t\t\t\t\t\t Library Statistics\n");
+            Console.WriteLine(new string('*', 120));
 
-            //int[] popularBook = new int[Books.Count];
-            //for (int i = 0; i < borrowBook.Count; i++) 
-            //{
-            //    for (int j = 0; j < popularBook.Length; j++)
-            //    {
-            //        if(borrowBook[i].BookId == j)
-            //        {
-            //            popularBook[j]++;
-            //        }
-            //    }
-                
-            //}
+            Books.Clear();
+            LoadBorrowedBookFile();
+            LoadBooksFromFile();
 
-            //Console.WriteLine("Number of Borroed Books is : " + borrowBook.Count);
-            //Console.WriteLine("Number of Books in Library is : " + booksInLibrary);
-            //Console.WriteLine("Most borrowed book : " );
-            //for (int i = 0;i < popularBook.Length; i++)
-            //{
-            //    if (popularBook[i] == popularBook.Max())
-            //    {
-            //        Console.WriteLine(Books[i].BName);
-            //    }
-            //}
+            Categories.Clear();
+            LoadFromCategoryFile();
+
+            borrowBook.Clear();
+            LoadBorrowedBookFile();
+
+            int booksInLibrary = Books.Count;
+            
+            int totalOFBorrowedB = 0;
+            for (int i = 0; i < Books.Count; i++)
+            {
+                booksInLibrary += Books[i].copies;
+                totalOFBorrowedB += Books[i].BorrowedCopies;
+            }
+            int Returned = 0;
+            for(int i = 0; i < borrowBook.Count; i++)
+            {
+                if (borrowBook[i].isReturn == false)
+                {
+                    Returned++;
+                }
+            }
+            
+            Console.WriteLine("{0,-30} {1,10}", "Number of Books in Library:", Books.Count);
+            Console.WriteLine("{0,-30} {1,10}", "Number of Copies in Library:", booksInLibrary);
+            Console.WriteLine("{0,-30} {1,10}", "Number of Borrowed Books:", totalOFBorrowedB);
+            Console.WriteLine("{0,-30} {1,10}", "Number of Returned Books:", Returned);
+            Console.WriteLine("{0,-30} {1,10}", "Number of Categories:", Categories.Count);
+
+            Console.WriteLine(new string('-', 115));
+            Console.WriteLine("{0,-20} ,{1,10}","Category name"," NO.Book\n");
+            for (int i = 0; i < Categories.Count; i++)
+            {
+                Console.WriteLine("{0,-20} ,{1,10}", Categories[i].CName , Categories[i].NOFBooks);
+            }
+            Console.WriteLine(new string('-', 115));
+
+
+            int[] popularBook = new int[Books.Count];
+            for (int i = 0; i < borrowBook.Count; i++)
+            {
+                for (int j = 1; j < popularBook.Length+1; j++)
+                {
+                    if (borrowBook[i].BId == j)
+                    {
+                        popularBook[j]++;
+                    }
+                }
+
+            }
+            Console.WriteLine(new string('-', 115));
+            Console.WriteLine("Most borrowed book : \n");
+            for (int i = 0; i < popularBook.Length; i++)
+            {
+                if (popularBook[i] == popularBook.Max())
+                {
+                    Console.WriteLine(Books[i].BName);
+                }
+            }
 
         }
 
