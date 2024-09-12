@@ -622,6 +622,11 @@ namespace BasicLibrary
             Console.WriteLine("\nEnter new Quantity : ");
             int qun = handelIntError(Console.ReadLine());
 
+            if (qun < 0)
+            {
+                Console.WriteLine("Not allowed to add negative copies..");
+                return;
+            }
             Console.WriteLine("\nThe new book edite is");
             Console.WriteLine(Books[index].ID + "\t" + Books[index].BName + "\t" + Books[index].BAuthor + "\t" + qun);
             Console.WriteLine("\nPress 1 to confirm ");

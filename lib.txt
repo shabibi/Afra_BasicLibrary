@@ -1,3 +1,15 @@
-book1|aaa|1|3
-book2|Ezz|2|4
-book4|ali|3|8
+1|c#|Agatha Christie|4|0|34.19|Software|16
+2|Algorithms Unleashed|Agatha Christie|2|0|64.5|Software|15
+3|Entire final expect|Julie Smith|3|0|27.47|Science|22
+4|Database fundamentals|Isaac Asimov|2|2|44.71|IT|15
+5|The Great Adventure|Katherine Case|3|1|26.17|Stories|13
+6|Cloud Computing|Isaac Asimov|1|1|38.04|IT|28
+7|Work here build|Katherine Case|2|0|77.11|Stories|21
+8|Against several|Edward Smith|3|0|20.22|Stories|20
+9|Data Structures|Agatha Christie|5|0|21.04|IT|20
+10|Learn whatever next|Tamara Mendoza|3|1|31.85|Stories|19
+11|Treat your make|Allen Parker|5|1|35.04|History|13
+12|Learning Python|Agatha Christie|5|0|79.9|IT|27
+13|Object Oriented fundamentals|J.K. Rowling|2|0|10.78|Software|10
+14|Heavy concern impact|Edward Smith|3|0|81.8|Stories|10
+15|DevOps in action|J.K. Rowling|1|0|31.37|IT|18
