@@ -251,8 +251,7 @@ namespace BasicLibrary
                         }
 
                     }
-                    Console.WriteLine("press enter key to continue");
-                    string cont = Console.ReadLine();
+                    
                     return;
                 }
             }
@@ -297,16 +296,16 @@ namespace BasicLibrary
                                       ID, name, author, qun, "0", price, category, BorrowPeriod);
                     Console.WriteLine(new string('-', 140));
 
-                    Console.WriteLine("To Confirm changes press 1");
+                    Console.WriteLine("To Add this book press 1");
                     choice = Console.ReadLine();
 
                     //confirm adding new book
                     if (choice == "1")
                     {
                         Books.Add((ID, name, author, qun, 0, price, category, BorrowPeriod));
-                        int catgNOFB = Categories[i].NOFBooks +1;
+                        int catgNOFB = Categories[i].NOFBooks +1 ;
                         Categories[i] = (Categories[i].CID, Categories[i].CName, catgNOFB);
-
+                        Console.WriteLine("n of catg"+ catgNOFB);
                         SaveCategoriesToFile();
                         SaveBooksToFile();
                         Console.WriteLine("Book Added Succefully");
@@ -1280,7 +1279,7 @@ namespace BasicLibrary
         {
             try
             {
-                using (StreamWriter writer = new StreamWriter(filePath))
+                using (StreamWriter writer = new StreamWriter(CategoriesFile))
                 {
                     foreach (var catg in Categories)
                     {
