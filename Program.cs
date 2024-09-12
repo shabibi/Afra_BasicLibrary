@@ -555,6 +555,14 @@ namespace BasicLibrary
 
             Console.WriteLine("Enter new title: ");
             string title = Console.ReadLine();
+            for (int i = 0; i < Books.Count; i++)
+            {
+                if (Books[i].BName == title)
+                {
+                    Console.WriteLine("The Title of this book is in the Library ");
+                    return;
+                }
+            }
 
             Console.WriteLine("\nThe new book edite is\n");
             Console.WriteLine(Books[index].ID + "\t" + title + "\t" + Books[index].BAuthor + "\t" + Books[index].copies);
