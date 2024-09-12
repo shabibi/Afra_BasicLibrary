@@ -19,7 +19,7 @@ namespace BasicLibrary
         static List<(int UId, int BId,DateTime Bdate, DateTime Rdate, DateTime? ActualRD,int? Rating,bool isReturn)>borrowBook
             = new List<(int UId, int BId, DateTime Bdate, DateTime Rdate, DateTime? ActualRD, int? Rating, bool isReturn)>();
 
-        static List<(int CID, string CName, string NOFBooks)> Categories = new List<(int CID, string CName, string NOFBooks)>();
+        static List<(int CID, string CName, int NOFBooks)> Categories = new List<(int CID, string CName, int NOFBooks)>();
 
         static string filePath = "C:\\Users\\Codeline User\\Desktop\\Afra\\lib.txt";
         static string AdminFile = "C:\\Users\\Codeline User\\Desktop\\Afra\\Admin.txt";
@@ -185,6 +185,10 @@ namespace BasicLibrary
             
             Books.Clear();
             LoadBooksFromFile();
+
+            Categories.Clear();
+            LoadFromCategoryFile();
+
             ViewAllBooks();
 
             int ID = 0;
@@ -262,37 +266,63 @@ namespace BasicLibrary
             Console.WriteLine("\nEnter Book Price");
             double price = double.Parse(Console.ReadLine());
 
-            Console.WriteLine("\nEnter Book Category");
-            string category = Console.ReadLine();
-
-            Console.WriteLine("\nEnter Book Borrow Period");
-            int BorrowPeriod = handelIntError(Console.ReadLine());
-
-            //desplay datat of new book befor confirm to add
-            Console.WriteLine("New Book data is \n");
-            Console.WriteLine("{0,-10} {1,-30} {2,-25} {3,5} {4,20} {5,10} {6,15} {7,15}",
-                          "ID", "Title", "Author", "Copies", "Borrowed Copies", "Price", "Category", "Borrow Period");
-            Console.WriteLine(new string('-', 140));
-
-            // Data row
-            Console.WriteLine("{0,-10} {1,-30} {2,-25} {3,5} {4,20} {5,10:F2} {6,15} {7,15}",
-                              ID, name, author, qun, "0", price, category, BorrowPeriod);
-            Console.WriteLine(new string('-', 140));
-
-            Console.WriteLine("To Confirm changes press 1");
-            choice = Console.ReadLine();
-
-            //confirm adding new book
-            if(choice == "1")
+            //Display Categories list
+            Console.WriteLine("\nEnter ID Book Category");
+            Console.WriteLine(new string('-', 115));
+            for (int i = 0; i < Categories.Count; i++)
             {
-                Books.Add((ID, name, author,  qun, 0, price, category, BorrowPeriod));
-                SaveBooksToFile();
-                Console.WriteLine("Book Added Succefully");
+                Console.WriteLine(Categories[i].CID + "\t" + Categories[i].CName);
             }
-            else
+            Console.WriteLine(new string('-', 115));
+            //check category existing
+            string category = null;
+            int catg = handelIntError(Console.ReadLine());
+            for (int i = 0; i < Categories.Count; i++)
             {
-                Console.WriteLine("The change was saved..");
+                if (catg == Categories[i].CID)
+                {
+                    category = Categories[i].CName;
+
+                    Console.WriteLine("\nEnter Book Borrow Period");
+                    int BorrowPeriod = handelIntError(Console.ReadLine());
+
+                    //desplay datat of new book befor confirm to add
+                    Console.WriteLine("New Book data is \n");
+                    Console.WriteLine("{0,-10} {1,-30} {2,-25} {3,5} {4,20} {5,10} {6,15} {7,15}",
+                                  "ID", "Title", "Author", "Copies", "Borrowed Copies", "Price", "Category", "Borrow Period");
+                    Console.WriteLine(new string('-', 140));
+
+                    // Data row
+                    Console.WriteLine("{0,-10} {1,-30} {2,-25} {3,5} {4,20} {5,10:F2} {6,15} {7,15}",
+                                      ID, name, author, qun, "0", price, category, BorrowPeriod);
+                    Console.WriteLine(new string('-', 140));
+
+                    Console.WriteLine("To Confirm changes press 1");
+                    choice = Console.ReadLine();
+
+                    //confirm adding new book
+                    if (choice == "1")
+                    {
+                        Books.Add((ID, name, author, qun, 0, price, category, BorrowPeriod));
+                        int catgNOFB = Categories[i].NOFBooks +1;
+                        Categories[i] = (Categories[i].CID, Categories[i].CName, catgNOFB);
+
+                        SaveCategoriesToFile();
+                        SaveBooksToFile();
+                        Console.WriteLine("Book Added Succefully");
+                    }
+                    else
+                    {
+                        Console.WriteLine("The change was saved..");
+                    }
+                    return;
+                }
             }
+            if (category == null)
+            {
+                Console.WriteLine("This category not existing in Library ");
+            }
+           
         }
 
         //Display All books available in the Library
@@ -1232,7 +1262,7 @@ namespace BasicLibrary
                             var parts = line.Split('|');
                             if (parts.Length == 3)
                             {
-                                Categories.Add((int.Parse(parts[0]), parts[1].Trim(), parts[2].Trim()));
+                                Categories.Add((int.Parse(parts[0]), parts[1].Trim(),int.Parse( parts[2])));
                             }
                         }
                     }
@@ -1255,7 +1285,7 @@ namespace BasicLibrary
                     foreach (var catg in Categories)
                     {
 
-                        writer.WriteLine($"{catg.CID}|{catg.CName}|{catg.GetType}");
+                        writer.WriteLine($"{catg.CID}|{catg.CName}|{catg.NOFBooks}");
                     }
                 }
 
