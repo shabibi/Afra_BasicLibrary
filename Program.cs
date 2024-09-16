@@ -412,16 +412,32 @@ namespace BasicLibrary
 
             for(int i = 0; i< Books.Count;i++)
             {
-                if (Books[i].BName.ToUpper() == name)
+                if (Books[i].BName.ToUpper().Contains(name))
                 {
-                    Console.WriteLine("\n"+Books[i].BName +" Author is : " + Books[i].BAuthor);
+                    Console.WriteLine($"\nBook ID: {Books[i].ID}");
+                    Console.WriteLine($"Book Name: {Books[i].BName}");
+                    Console.WriteLine($"Author: {Books[i].BAuthor}");
+                    Console.WriteLine($"Copies: {Books[i].copies}");
+                    Console.WriteLine($"Borrowed Copies: {Books[i].BorrowedCopies}");
+                    Console.WriteLine();
+
                     flag = true;
-                    break;
                 }
+            
+            }
+            if (flag != true)
+            { 
+                Console.WriteLine("\nbook not found"); 
+                return ;
             }
 
-            if (flag != true)
-            { Console.WriteLine("\nbook not found"); }
+            Console.WriteLine("Press 1 if you want to Borrow Book ?!");
+            string choice = Console.ReadLine();
+            if (choice == "1")
+            {
+                BorrowBook();
+            }
+
         }
 
         static void LoadBooksFromFile()
