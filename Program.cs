@@ -1275,7 +1275,7 @@ namespace BasicLibrary
         {
 
             List<int> SuggestedBookIds = new List<int>();
-
+            string catg = null;
             //add ids of user who borrow same book in list
             List<int> SimilarPeopleIds = new List<int>();
 
@@ -1283,6 +1283,7 @@ namespace BasicLibrary
             {
                 if (bId == borrowBook[i].BId)
                 {
+                   
                     if (borrowBook[i].UId != userID)
                     {
                         SimilarPeopleIds.Add(borrowBook[i].UId);
@@ -1312,6 +1313,22 @@ namespace BasicLibrary
                 for (int i = 0; i < FinalSuggestedBookIds.Count; i++)
                 {
                     Console.WriteLine(Books[FinalSuggestedBookIds[i]].ID+"\t" +Books[FinalSuggestedBookIds[i]].BName);
+                }
+            }
+            else
+            {
+                Console.WriteLine("Suggestion for books of the same Category.. \n");
+                for (int i=0; i<Books.Count; i++)
+                {
+                    if (Books[i].ID == bId)
+                    {
+                        catg = Books[i].Category;
+                    }
+                    
+                    if (Books[i].Category ==catg)
+                    {
+                        Console.WriteLine(Books[i].ID + "\t" + Books[i].BName);
+                    }
                 }
             }
             Console.WriteLine();
