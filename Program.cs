@@ -465,8 +465,8 @@ namespace BasicLibrary
                             var parts = line.Split('|');
                             if (parts.Length == 8)
                             {
-                                Books.Add((int.Parse(parts[0]), parts[1].Trim(), parts[2].Trim(),  int.Parse(parts[3]),
-                                    int.Parse(parts[4]), double.Parse(parts[5]), parts[6].Trim(), int.Parse(parts[7])));
+                                Books.Add((int.Parse(parts[0].Trim()), parts[1].Trim(), parts[2].Trim(),  int.Parse(parts[3].Trim()),
+                                    int.Parse(parts[4].Trim()), double.Parse(parts[5].Trim()), parts[6].Trim(), int.Parse(parts[7].Trim())));
                             }
                         }
                     }
@@ -980,7 +980,7 @@ namespace BasicLibrary
                             var parts = line.Split('|');
                             if (parts.Length == 4)
                             {
-                                Admin.Add((handelIntError(parts[0]), parts[1], parts[2], handelIntError(parts[3])));
+                                Admin.Add((handelIntError(parts[0].Trim()), parts[1].Trim(), parts[2].Trim(), handelIntError(parts[3].Trim())));
                             }
                         }
                     }
@@ -1122,7 +1122,7 @@ namespace BasicLibrary
                             var parts = line.Split('|');
                             if (parts.Length == 4)
                             {
-                                Users.Add((int.Parse(parts[0]), parts[1], parts[2],parts[3]));
+                                Users.Add((int.Parse(parts[0].Trim()), parts[1].Trim(), parts[2].Trim(),parts[3].Trim()));
                             }
                         }
                     }
@@ -1179,13 +1179,13 @@ namespace BasicLibrary
                             {
                                 // Handle each part with default values if parsing fails
                                 
-                                int userId = int.Parse(parts[0]);
-                                int bId = int.Parse(parts[1]);
-                                DateTime borrowDate = DateTime.Parse(parts[2]);
-                                DateTime returnDate = DateTime.Parse(parts[3]);
-                                DateTime? dueDate = ParseDate(parts[4]);
-                                int? fine = ParseInt(parts[5]);
-                                bool isReturned = bool.Parse(parts[6]);
+                                int userId = int.Parse(parts[0].Trim());
+                                int bId = int.Parse(parts[1].Trim());
+                                DateTime borrowDate = DateTime.Parse(parts[2].Trim());
+                                DateTime returnDate = DateTime.Parse(parts[3].Trim());
+                                DateTime? dueDate = ParseDate(parts[4].Trim());
+                                int? fine = ParseInt(parts[5].Trim());
+                                bool isReturned = bool.Parse(parts[6].Trim());
 
                                 borrowBook.Add((userId, bId,  borrowDate, returnDate, dueDate, fine, isReturned));
                             }
@@ -1392,7 +1392,7 @@ namespace BasicLibrary
                             var parts = line.Split('|');
                             if (parts.Length == 3)
                             {
-                                Categories.Add((int.Parse(parts[0]), parts[1].Trim(),int.Parse( parts[2])));
+                                Categories.Add((int.Parse(parts[0].Trim()), parts[1].Trim(),int.Parse( parts[2].Trim())));
                             }
                         }
                     }
