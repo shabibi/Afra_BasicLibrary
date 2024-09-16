@@ -401,8 +401,10 @@ namespace BasicLibrary
         static void SearchForBook()
         {
             Console.Clear();
-            Console.WriteLine("-----------------------Search for Book-----------------------\n");
-            
+            Console.WriteLine(new string('*', 140));
+            Console.WriteLine("\t\t\t\t\t\t Search for Book\n");
+            Console.WriteLine(new string('*', 140));
+
             ViewAllBooks();
 
             Console.WriteLine("Enter the book name you want");
@@ -410,7 +412,8 @@ namespace BasicLibrary
 
             bool flag=false;
 
-            for(int i = 0; i< Books.Count;i++)
+            //display all the books that have the same word in its name
+            for (int i = 0; i< Books.Count;i++)
             {
                 if (Books[i].BName.ToUpper().Contains(name))
                 {
@@ -431,12 +434,17 @@ namespace BasicLibrary
                 return ;
             }
 
-            Console.WriteLine("Press 1 if you want to Borrow Book ?!");
-            string choice = Console.ReadLine();
-            if (choice == "1")
+            //check if user want to borrow
+            if (userID != 0)
             {
-                BorrowBook();
+                Console.WriteLine("Press 1 if you want to Borrow Book ?!");
+                string choice = Console.ReadLine();
+                if (choice == "1")
+                {
+                    BorrowBook();
+                }
             }
+            
 
         }
 
@@ -868,6 +876,7 @@ namespace BasicLibrary
         //Verify Admin access and add admin if not found
         static void CheckAdmin()
         {
+            userID = 0;
             int Fixedpassword = 12345;
             int password;
             Admin.Clear();
