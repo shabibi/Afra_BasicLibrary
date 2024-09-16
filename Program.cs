@@ -130,6 +130,7 @@ namespace BasicLibrary
         //Display User menu
         static void UserMenu(string userName)
         {
+            Overdue();
             bool ExitFlag = false;
             do
             {
@@ -411,7 +412,7 @@ namespace BasicLibrary
             string name = Console.ReadLine().ToUpper();  
 
             bool flag=false;
-
+            
             //display all the books that have the same word in its name
             for (int i = 0; i< Books.Count;i++)
             {
@@ -1375,6 +1376,28 @@ namespace BasicLibrary
             catch (Exception ex)
             {
                 Console.WriteLine($"Error saving to file: {ex.Message}");
+            }
+        }
+
+        static void Overdue()
+        {
+            borrowBook.Clear();
+            LoadBorrowedBookFile();
+            for (int i = 0; i < borrowBook.Count; i++)
+            {
+
+                if ((borrowBook[i].UId == userID) && (!borrowBook[i].isReturn))
+                {
+                    if (borrowBook[i].Rdate < DateTime.Today)
+                    {
+                        Console.WriteLine("\nYou have a book that is Overdue..\n");
+                        Console.WriteLine("Press enter to Return it ..");
+                        Console.ReadLine();
+
+                            ReturnBook();
+               
+                    }
+                }
             }
         }
         static int? ParseInt(string value)
