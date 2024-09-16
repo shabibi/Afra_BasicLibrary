@@ -353,50 +353,48 @@ namespace BasicLibrary
         //Remove books from the library by entering book's id
         static void RemoveBook()
         {
-            //Console.Clear();
-            //Console.WriteLine(new string('*', 140));
-            //Console.WriteLine("\t\t\t\t\t\t Removing Book\n");
-            //Console.WriteLine(new string('*', 140));
+            Console.Clear();
+            Console.WriteLine(new string('*', 140));
+            Console.WriteLine("\t\t\t\t\t\t Removing Book\n");
+            Console.WriteLine(new string('*', 140));
 
-            //Books.Clear();
-            //LoadBooksFromFile();
+            Books.Clear();
+            LoadBooksFromFile();
 
-            //borrowBook.Clear();
-            //LoadBorrowedBookFile();
-            //ViewAllBooks();
-            
-            //bool flge = false;
-            //string removedBook;
+            borrowBook.Clear();
+            LoadBorrowedBookFile();
+            ViewAllBooks();
 
-            //Console.WriteLine("Enter Book ID");
-            //int ID = handelIntError(Console.ReadLine());
-            //int index = -1;
-            //for (int i = 0; i < Books.Count; i++)
-            //{
-            //    //index = borrowBook.FindIndex(book => book.BookId == Books[i].ID);
-            //    if (Books[i].ID == ID)
-            //    {
-            //        for(int j = 0; j < borrowBook.Count; j++)
-            //        {
-            //            if (borrowBook[j].BookId == ID)
-            //            {
-            //                Console.WriteLine("This Book was Borrowed you cannot Remove it..");
-            //                return;
-            //            }
-            //        }
-            //        removedBook = Books[i].BName;
-            //        Books.RemoveAt(i);
-            //        SaveBooksToFile();
-            //        flge = true;
-            //        Console.WriteLine(removedBook + " Removed from Library");
+            bool flge = false;
+            string removedBook;
 
-            //    }
-            //}
-            
-            //if (flge != true)
-            //{
-            //    Console.WriteLine("Book not availabe");
-            //}
+            Console.WriteLine("Enter Book ID");
+            int ID = handelIntError(Console.ReadLine());
+            int index = -1;
+            for (int i = 0; i < Books.Count; i++)
+            {
+                //index = borrowBook.FindIndex(book => book.BookId == Books[i].ID);
+                if (Books[i].ID == ID)
+                {
+                    if (Books[i].BorrowedCopies > 0)
+                    {
+                        Console.WriteLine("This Book was Borrowed you cannot Remove it..");
+                        return;
+                    }
+               
+                    removedBook = Books[i].BName;
+                    Books.RemoveAt(i);
+                    SaveBooksToFile();
+                    flge = true;
+                    Console.WriteLine(removedBook + " Removed from Library");
+
+                }
+            }
+
+            if (flge != true)
+            {
+                Console.WriteLine("Book not availabe");
+            }
 
         }
         //Search for book's Author be entering book's name
@@ -826,7 +824,7 @@ namespace BasicLibrary
                 if ((borrowBook[i].BId == ID) && (borrowBook[i].UId == userID) && (!borrowBook[i].isReturn))
                 {
                     Console.WriteLine("\n" + Books[index].BName + " returned to the library\n\nThank you.");
-                    Console.WriteLine("How would rate the book out of 10 ?");
+                    Console.WriteLine("How would you rate the book out of 10 ?");
                     int rate = handelIntError(Console.ReadLine());
 
                     //update books list
@@ -836,7 +834,7 @@ namespace BasicLibrary
 
                     //update borrow books list
                     borrowBook[i] = (borrowBook[i].UId, borrowBook[i].BId,borrowBook[i].Bdate, borrowBook[i].Rdate, DateTime.Now.Date, rate,true);
-
+                    
                     //save changes to files.
                     BorrowedBookFile();
                     SaveBooksToFile();
@@ -1210,7 +1208,7 @@ namespace BasicLibrary
             int[] popularBook = new int[Books.Count];
             for (int i = 0; i < borrowBook.Count; i++)
             {
-                for (int j = 1; j < popularBook.Length+1; j++)
+                for (int j = 1; j < popularBook.Length; j++)
                 {
                     if (borrowBook[i].BId == j)
                     {
