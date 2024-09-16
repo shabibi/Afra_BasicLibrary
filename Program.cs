@@ -140,7 +140,8 @@ namespace BasicLibrary
                 Console.WriteLine("\n   1- Search for Book by Name");
                 Console.WriteLine("\n   2- Borrow Book");
                 Console.WriteLine("\n   3- Return Book");
-                Console.WriteLine("\n   4- Exit");
+                Console.WriteLine("\n   4- Show profile");
+                Console.WriteLine("\n   5- Exit");
 
                 int choice = handelIntError(Console.ReadLine());
 
@@ -159,6 +160,9 @@ namespace BasicLibrary
                         break;
 
                     case 4:
+                        UserProfile();
+                        break;
+                    case 5:
                         ExitFlag = true;
                         break;
 
@@ -1442,6 +1446,56 @@ namespace BasicLibrary
                     }
                 }
             }
+        }
+
+        static void UserProfile()
+        {
+            Console.Clear();
+            borrowBook.Clear ();
+            LoadBorrowedBookFile();
+            int index = -1;
+            for (int i = 0; i < Users.Count; i++)
+            {
+                if(userID == Users[i].UID)
+                {
+                    Console.WriteLine("User ID: " + userID);
+                    Console.WriteLine("User Name: " + Users[i].UserName);
+                    Console.WriteLine("User Name: " + Users[i].email);
+                }
+            }
+            Console.WriteLine("**********************************************************");
+            Console.WriteLine("\nHistory of Borrowing");
+            Console.WriteLine("--------------------------------------------------------");
+            Console.WriteLine("{0,-10} {1,-20} {2,-10} {3,-10}", "Book ID", "Book Name", "Status", "Return Status");
+            Console.WriteLine("--------------------------------------------------------");
+            for (int i = 0;i<borrowBook.Count; i++)
+            {
+               
+                if (borrowBook[i].UId == userID)
+                {
+                    index = Books.FindIndex(book => book.ID == borrowBook[i].BId);
+                    if (borrowBook[i].isReturn)
+                    {
+                        
+                        if (borrowBook[i].Rdate < DateTime.Today)
+                        {
+                            Console.WriteLine("{0,-10} {1,-20} {2,-10} {3,-20}",borrowBook[i].BId , Books[index].BName ,"Returned","Overdue");
+                        }
+                        else
+                        {
+                            Console.WriteLine("{0,-10} {1,-20} {2,-10} {3,-20}", borrowBook[i].BId, Books[index].BName, "Returned", "On Time");
+                         
+                        }
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("{0,-10} {1,-20} {2,-10} {3,-20}", borrowBook[i].BId, Books[index].BName, "Borrowed", borrowBook[i].Rdate.ToString("yyyy-MM-dd"));
+                       
+                    }
+                }
+            }
+                
         }
         static int? ParseInt(string value)
         {
