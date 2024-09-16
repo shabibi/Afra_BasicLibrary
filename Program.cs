@@ -1273,47 +1273,58 @@ namespace BasicLibrary
         //Display Book Suggestion for user after borrowing book
         static void BookSuggestion(int bId)
         {
-            
-          //List<int> SuggestedBookIds = new List<int> ();
 
-          //  //add ids of user who borrow same book in list
-          //  List<int> SimilarPeopleIds = new List<int>();
+            List<int> SuggestedBookIds = new List<int>();
 
-          //  for (int i = 0; i < borrowBook.Count; i++)
-          //  {
-          //      if (bId == borrowBook[i].BookId)
-          //      {
-          //          if (borrowBook[i].userId != userID)
-          //          {
-          //              SimilarPeopleIds.Add(borrowBook[i].userId);
-          //          }
-          //      }
-          //  }
-          //  //add ids of books for users in SimilarPeopleIds in list
-          //  for (int j = 0; j < SimilarPeopleIds.Count; j++)
-          //  {
+            //add ids of user who borrow same book in list
+            List<int> SimilarPeopleIds = new List<int>();
 
-          //      for (int i = 0; i < borrowBook.Count; i++)
-          //      {
-          //          if (borrowBook[i].userId == SimilarPeopleIds[j] && borrowBook[i].BookId != bId)
-          //          {
-          //              SuggestedBookIds.Add(borrowBook[i].BookId);
+            for (int i = 0; i < borrowBook.Count; i++)
+            {
+                if (bId == borrowBook[i].BId)
+                {
+                    if (borrowBook[i].UId != userID)
+                    {
+                        SimilarPeopleIds.Add(borrowBook[i].UId);
+                    }
+                }
+            }
+            //add ids of books for users in SimilarPeopleIds in list
+            for (int j = 0; j < SimilarPeopleIds.Count; j++)
+            {
 
-          //          }
-          //      }
-          //  }
-          //  //Remove similar books in SuggestedBookIds list
-          //  List<int> FinalSuggestedBookIds = SuggestedBookIds.Distinct().ToList();
+                for (int i = 0; i < borrowBook.Count; i++)
+                {
+                    if (borrowBook[i].UId == SimilarPeopleIds[j] && borrowBook[i].BId != bId)
+                    {
+                        SuggestedBookIds.Add(borrowBook[i].BId);
 
-          //  //Display Suggestion list
-          //  if (FinalSuggestedBookIds.Count != 0)
-          //  {
-          //      Console.WriteLine("People who borrowed this book also borrowed with it");
-          //      for (int i = 0; i < FinalSuggestedBookIds.Count; i++)
-          //      {
-          //          Console.WriteLine(Books[FinalSuggestedBookIds[i]].BName);
-          //      }
-          //  }
+                    }
+                }
+            }
+            //Remove similar books in SuggestedBookIds list
+            List<int> FinalSuggestedBookIds = SuggestedBookIds.Distinct().ToList();
+            Console.WriteLine("*******************************************************");
+            //Display Suggestion list
+            if (FinalSuggestedBookIds.Count != 0)
+            {
+                Console.WriteLine("People who borrowed this book also borrowed with it\n");
+                for (int i = 0; i < FinalSuggestedBookIds.Count; i++)
+                {
+                    Console.WriteLine(Books[FinalSuggestedBookIds[i]].ID+"\t" +Books[FinalSuggestedBookIds[i]].BName);
+                }
+            }
+            Console.WriteLine();
+            Console.WriteLine("\nPress 1 if you want to borrow another book?\n");
+            string choise = Console.ReadLine();
+            if (choise == "1")
+            {
+                BorrowBook();
+                return;
+            }
+            else
+                return;
+
         }
 
         //Handel integer input errors
