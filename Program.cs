@@ -1023,7 +1023,7 @@ namespace BasicLibrary
             
             string password;
             bool flag = false;
-            Console.WriteLine("\nEnter your email");
+            Console.WriteLine("\nEnter your email (e.g example@example.com) ");
             string email = Console.ReadLine();
             if (IsEmailValid(email))
             {
@@ -1034,29 +1034,47 @@ namespace BasicLibrary
                     {
                         Console.WriteLine("\nEnter Password..");
                         password = Console.ReadLine();
-                        if (Users[i].password != password)
+                        do
                         {
-                            Console.WriteLine("Incorrect Passward");
-                            Console.WriteLine("\npress enter key to continue");
-                            string cont = Console.ReadLine();
-                        }
-                        else
-                        {
-                            userID = Users[i].UID;
-                            UserMenu(Users[i].UserName);
-                            
-                        }
+                            if (Users[i].password != password)
+                            {
+                                Console.WriteLine("Incorrect Passward");
+                                Console.WriteLine("\nRe_enter Passward");
+                                password = Console.ReadLine();
+                                flag = true;
+                            }
+                            else
+                                flag =false;
+                        } while (flag == true);
+
+                        userID = Users[i].UID;
+                        UserMenu(Users[i].UserName);
                         return;
+
                     }
                 }
-
+               
                 Console.WriteLine("\nEmail not Registered befor..");
-                Console.WriteLine("\nDo you want to add new admin?(enter 1 if yes)");
+                Console.WriteLine("\nDo you want to add new User?(enter 1 if yes)");
                 int choice = handelIntError(Console.ReadLine());
                 if (choice == 1)
                 {
+                    
                     Console.WriteLine("Enter Admin Password..");
                     password = Console.ReadLine();
+                    do
+                    {
+                        if (!IsPasswordlValid(password))
+                        {
+                            Console.WriteLine("Invalid Password ..");
+                            Console.WriteLine("password must be at least 8 characters and including uppercase char, lower case char and digitl ");
+                            password = Console.ReadLine();
+                            flag = true;
+                        }
+                        else
+                            flag = false;
+
+                    }while (flag == true);
 
                     Console.WriteLine("\nEnter your Name..");
                     string name = Console.ReadLine();
@@ -1377,6 +1395,11 @@ namespace BasicLibrary
             return (regexEmail.IsMatch(email));
         }
 
+        static bool IsPasswordlValid(string passward)
+        {
+            var regexEmail = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$");
+            return (regexEmail.IsMatch(passward));
+        }
         //Read Category file
         static void LoadFromCategoryFile()
         {
