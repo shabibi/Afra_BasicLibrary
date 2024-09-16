@@ -333,8 +333,6 @@ namespace BasicLibrary
             Console.WriteLine(new string('*', 140));
             Console.WriteLine("\t\t\t\t\t\t Books Menu\n");
             Console.WriteLine(new string('*', 140));
-            StringBuilder sb = new StringBuilder();
-
             
             Console.WriteLine("\n{0,-10} {1,-30} {2,-25} {3,5} {4,20} {5,10} {6,15} {7,15}",
                               "ID", "Title", "Author", "Copies", "Borrowed Copies", "Price", "Category", "Borrow Period");
@@ -684,8 +682,24 @@ namespace BasicLibrary
             Console.WriteLine(new string('*', 140));
             Console.WriteLine("\t\t\t\t\t\t Borrow Book\n");
 
-            ViewAllBooks();
 
+            Console.WriteLine(new string('*', 140));
+            Console.WriteLine("\t\t\t\t\t\t Books Menu\n");
+            Console.WriteLine(new string('*', 140));
+
+            Console.WriteLine("\n{0,-10} {1,-30} {2,-25} {3,5} {4,20} {5,10} {6,15} {7,15}",
+                              "ID", "Title", "Author", "Copies", "Borrowed Copies", "Price", "Category", "Borrow Period");
+            Console.WriteLine(new string('-', 140));
+
+            for (int i = 0; i < Books.Count; i++)
+            {
+                if (Books[i].copies > 0)
+                {
+                    Console.WriteLine("{0,-10} {1,-30} {2,-25} {3,5} {4,20} {5,10:F2} {6,15} {7,15}", Books[i].ID, Books[i].BName, Books[i].BAuthor,
+                    Books[i].copies, Books[i].BorrowedCopies, Books[i].Price,
+                    Books[i].Category, Books[i].BorrowPeriod);
+                }
+            }
             bool flge = false;
             string choice;
             Console.WriteLine("\nEnter Book ID");
@@ -695,7 +709,7 @@ namespace BasicLibrary
             {
                 if (Books[i].ID == ID)
                 {
-                    if (Books[i].copies > 0)
+                    if (Books[i].copies != Books[i].BorrowedCopies)
                     {
                         for (int j = 0; j < borrowBook.Count; j++)
                         {
@@ -710,6 +724,7 @@ namespace BasicLibrary
                                     if (choice == "1")
                                     {
                                         BorrowBook();
+                                        return;
                                     }
                                     else if (choice == "2")
                                     {
@@ -724,7 +739,7 @@ namespace BasicLibrary
                                 }
                                 else
                                 {
-                                    Books[i] = (Books[i].ID, Books[i].BName, Books[i].BAuthor, (Books[i].copies - 1), (Books[i].BorrowedCopies + 1)
+                                    Books[i] = (Books[i].ID, Books[i].BName, Books[i].BAuthor, (Books[i].copies ), (Books[i].BorrowedCopies +1 )
                                          , Books[i].Price, Books[i].Category, Books[i].BorrowPeriod);
                                     Console.WriteLine("\n" + Books[i].BName + " is availabe.");
                                     Console.WriteLine("********************************************************************");
@@ -760,7 +775,7 @@ namespace BasicLibrary
                                 }
                             }
                         }
-                        Books[i] = (Books[i].ID, Books[i].BName, Books[i].BAuthor, (Books[i].copies - 1), (Books[i].BorrowedCopies + 1)
+                        Books[i] = (Books[i].ID, Books[i].BName, Books[i].BAuthor, (Books[i].copies), (Books[i].BorrowedCopies + 1)
                            , Books[i].Price, Books[i].Category, Books[i].BorrowPeriod);
                         Console.WriteLine("\n" + Books[i].BName + " is availabe.");
                         Console.WriteLine("********************************************************************");
@@ -854,7 +869,7 @@ namespace BasicLibrary
 
                     //update books list
                     index = Books.FindIndex(book => book.ID == borrowBook[i].BId);
-                    Books[index] = (Books[index].ID, Books[index].BName, Books[index].BAuthor,  (Books[index].copies + 1),
+                    Books[index] = (Books[index].ID, Books[index].BName, Books[index].BAuthor,  (Books[index].copies),
                         (Books[index].BorrowedCopies - 1), Books[index].Price, Books[index].Category, Books[index].BorrowPeriod);
 
                     //update borrow books list
