@@ -12,7 +12,7 @@ namespace BasicLibrary
         static List<(int ID, string BName, string BAuthor, int copies,int BorrowedCopies,double Price,string Category,int BorrowPeriod)> Books
             = new List<(int ID, string BName, string BAuthor,  int copies, int BorrowedCopies, double Price, string Category, int BorrowPeriod)>();
 
-        static List<(int AID,string Aname, string email,int password)>Admin = new List<(int AID, string Aname, string email, int password)>();
+        static List<(int AID,string Aname, string email,string password)>Admin = new List<(int AID, string Aname, string email, string password)>();
 
         static List<(int UID,string UserName,string email, string password)> Users = new List<(int UID, string UserName, string email, string password)>();
 
@@ -332,6 +332,7 @@ namespace BasicLibrary
         //Display All books available in the Library
         static void ViewAllBooks()
         {
+            Console.Clear();
             Books.Clear();
             LoadBooksFromFile();
             Console.WriteLine(new string('*', 140));
@@ -897,11 +898,11 @@ namespace BasicLibrary
         static void CheckAdmin()
         {
             userID = 0;
-            int Fixedpassword = 12345;
-            int password;
+            
+            string password;
             Admin.Clear();
             AdminsFile();
-
+            bool flag = false;
             Console.WriteLine("\nEnter your email");
             string email = Console.ReadLine();
             if (IsEmailValid(email))
@@ -912,13 +913,14 @@ namespace BasicLibrary
                     if (Admin[i].email.Contains(email))
                     {
                         Console.WriteLine("\nEnter Admin's Password..");
-                        password = handelIntError(Console.ReadLine());
-                        if (Fixedpassword == password)
+                        password = Console.ReadLine();
+                        if (Admin[i].password == password)
                         {
                             AdminMenu(Admin[i].Aname);
                         }
                         else
                         {
+        
                             Console.WriteLine("Incorrect Admin's Password");
                             Console.WriteLine("\npress enter key to continue");
                             string cont = Console.ReadLine();
@@ -933,21 +935,28 @@ namespace BasicLibrary
                 if (choice == 1)
                 {
                     Console.WriteLine("Enter Admin Password..");
-                    password = handelIntError(Console.ReadLine());
-                    if (Fixedpassword == password)
+                    password = Console.ReadLine();
+                    do
                     {
-                        Console.WriteLine("\nEnter your Name..");
-                        string name = Console.ReadLine();
-                        Admin.Add((Admin.Count, name, email, password));
-                        AddNewAdmin();
-                        AdminMenu(name);
-                    }
-                    else
-                    {
-                        Console.WriteLine("\nIncorrect Admin Password");
-                        Console.WriteLine("\npress enter key to continue");
-                        string cont = Console.ReadLine();
-                    }
+                        if (!IsPasswordlValid(password))
+                        {
+                            Console.WriteLine("Invalid Password ..");
+                            Console.WriteLine("password must be at least 8 characters and including uppercase char, lower case char and digitl ");
+                            password = Console.ReadLine();
+                            flag = true;
+                        }
+                        else
+                            flag = false;
+
+                    } while (flag == true);
+
+
+                    Console.WriteLine("\nEnter your Name..");
+                    string name = Console.ReadLine();
+                    Admin.Add((Admin.Count+1, name, email, password));
+                    AddNewAdmin();
+                    AdminMenu(name);
+
                 }
                 else
                 {
@@ -980,7 +989,7 @@ namespace BasicLibrary
                             var parts = line.Split('|');
                             if (parts.Length == 4)
                             {
-                                Admin.Add((handelIntError(parts[0].Trim()), parts[1].Trim(), parts[2].Trim(), handelIntError(parts[3].Trim())));
+                                Admin.Add((handelIntError(parts[0].Trim()), parts[1].Trim(), parts[2].Trim(), parts[3].Trim()));
                             }
                         }
                     }
