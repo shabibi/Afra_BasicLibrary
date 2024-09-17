@@ -183,11 +183,11 @@ namespace BasicLibrary
         }
 
         //Add new book to the libarary
-        static void AddnNewBook() 
+        static void AddnNewBook()
         {
             Console.Clear();
             Console.WriteLine("------------------------Adding Book-------------------------\n");
-            
+
             Books.Clear();
             LoadBooksFromFile();
 
@@ -198,7 +198,7 @@ namespace BasicLibrary
 
             int ID = 0;
             string choice;
-            
+
             for (int i = 0; i < Books.Count; i++)
             {
                 if (i == Books.Count - 1)
@@ -211,14 +211,14 @@ namespace BasicLibrary
             Console.WriteLine("Enter Book Name");
             string name = Console.ReadLine();
 
-            for (int i = 0; i < Books.Count; i++) 
+            for (int i = 0; i < Books.Count; i++)
             {
                 //if book is already in the library
                 if (Books[i].BName.ToLower() == name.ToLower())
                 {
                     Console.WriteLine("\nThis book is already added to the Library.. ");
                     Console.WriteLine("\nDo you want to add more copies?\n(press 1 to confirm)");
-                     choice = Console.ReadLine();
+                    choice = Console.ReadLine();
                     if (choice == "1")
                     {
                         Console.WriteLine("\nEnter number of copies to add..");
@@ -227,16 +227,16 @@ namespace BasicLibrary
 
                         //display new updates of exicting book
                         Console.WriteLine("\nNew update for " + Books[i].BName + " is \n");
-                        
+
                         Console.WriteLine("{0,-10} {1,-30} {2,-25} {3,5} {4,20} {5,10} {6,15} {7,15}",
                                       "ID", "Title", "Author", "Copies", "Borrowed Copies", "Price", "Category", "Borrow Period");
                         Console.WriteLine(new string('-', 140));
 
-                        Console.WriteLine("{0,-10} {1,-30} {2,-25} {3,5} {4,20} {5,10:F2} {6,15} {7,15}", Books[i].ID, Books[i].BName, Books[i].BAuthor ,
-                            copy , Books[i].BorrowedCopies , Books[i].Price,
-                            Books[i].Category ,Books[i].BorrowPeriod);
+                        Console.WriteLine("{0,-10} {1,-30} {2,-25} {3,5} {4,20} {5,10:F2} {6,15} {7,15}", Books[i].ID, Books[i].BName, Books[i].BAuthor,
+                            copy, Books[i].BorrowedCopies, Books[i].Price,
+                            Books[i].Category, Books[i].BorrowPeriod);
                         Console.WriteLine(new string('-', 140));
-                        
+
 
                         Console.WriteLine("\nTo Confirm changes press 1");
                         choice = Console.ReadLine();
@@ -244,7 +244,7 @@ namespace BasicLibrary
                         //confirm updates in number of copies
                         if (choice == "1")
                         {
-                            Books[i]=((Books[i].ID, Books[i].BName, Books[i].BAuthor, 
+                            Books[i] = ((Books[i].ID, Books[i].BName, Books[i].BAuthor,
                              copy, Books[i].BorrowedCopies, Books[i].Price,
                             Books[i].Category, Books[i].BorrowPeriod));
                             SaveBooksToFile();
@@ -256,7 +256,7 @@ namespace BasicLibrary
                         }
 
                     }
-                    
+
                     return;
                 }
             }
@@ -266,66 +266,75 @@ namespace BasicLibrary
 
             Console.WriteLine("\nEnter Book Copies");
             int qun = handelIntError(Console.ReadLine());
-
+            bool flage = false;
             Console.WriteLine("\nEnter Book Price");
             double price = handelDoubleError(Console.ReadLine());
 
             //Display Categories list
-            Console.WriteLine("\nEnter ID Book Category");
-            Console.WriteLine(new string('-', 115));
-            for (int i = 0; i < Categories.Count; i++)
+            do
             {
-                Console.WriteLine(Categories[i].CID + "\t" + Categories[i].CName);
-            }
-            Console.WriteLine(new string('-', 115));
-            //check category existing
-            string category = null;
-            int catg = handelIntError(Console.ReadLine());
-            for (int i = 0; i < Categories.Count; i++)
-            {
-                if (catg == Categories[i].CID)
+                Console.WriteLine("\nEnter ID of Book Category");
+                Console.WriteLine(new string('-', 115));
+                for (int i = 0; i < Categories.Count; i++)
                 {
-                    category = Categories[i].CName;
-
-                    Console.WriteLine("\nEnter Book Borrow Period");
-                    int BorrowPeriod = handelIntError(Console.ReadLine());
-
-                    //desplay datat of new book befor confirm to add
-                    Console.WriteLine("New Book data is \n");
-                    Console.WriteLine("{0,-10} {1,-30} {2,-25} {3,5} {4,20} {5,10} {6,15} {7,15}",
-                                  "ID", "Title", "Author", "Copies", "Borrowed Copies", "Price", "Category", "Borrow Period");
-                    Console.WriteLine(new string('-', 140));
-
-                    // Data row
-                    Console.WriteLine("{0,-10} {1,-30} {2,-25} {3,5} {4,20} {5,10:F2} {6,15} {7,15}",
-                                      ID, name, author, qun, "0", price, category, BorrowPeriod);
-                    Console.WriteLine(new string('-', 140));
-
-                    Console.WriteLine("To Add this book press 1");
-                    choice = Console.ReadLine();
-
-                    //confirm adding new book
-                    if (choice == "1")
-                    {
-                        Books.Add((ID, name, author, qun, 0, price, category, BorrowPeriod));
-                        int catgNOFB = Categories[i].NOFBooks +1 ;
-                        Categories[i] = (Categories[i].CID, Categories[i].CName, catgNOFB);
-                        
-                        SaveCategoriesToFile();
-                        SaveBooksToFile();
-                        Console.WriteLine("Book Added Succefully");
-                    }
-                    else
-                    {
-                        Console.WriteLine("The change was saved..");
-                    }
-                    return;
+                    Console.WriteLine(Categories[i].CID + "\t" + Categories[i].CName);
                 }
-            }
-            if (category == null)
-            {
-                Console.WriteLine("This category not existing in Library ");
-            }
+                Console.WriteLine(new string('-', 115));
+                //check category existing
+                string category = null;
+                int catg = handelIntError(Console.ReadLine());
+                for (int i = 0; i < Categories.Count; i++)
+                {
+                    if (catg == Categories[i].CID)
+                    {
+                        category = Categories[i].CName;
+
+                        Console.WriteLine("\nEnter Book Borrow Period");
+                        int BorrowPeriod = handelIntError(Console.ReadLine());
+
+                        //desplay datat of new book befor confirm to add
+                        Console.WriteLine("New Book data is \n");
+                        Console.WriteLine("{0,-10} {1,-30} {2,-25} {3,5} {4,20} {5,10} {6,15} {7,15}",
+                                      "ID", "Title", "Author", "Copies", "Borrowed Copies", "Price", "Category", "Borrow Period");
+                        Console.WriteLine(new string('-', 140));
+
+                        // Data row
+                        Console.WriteLine("{0,-10} {1,-30} {2,-25} {3,5} {4,20} {5,10:F2} {6,15} {7,15}",
+                                          ID, name, author, qun, "0", price, category, BorrowPeriod);
+                        Console.WriteLine(new string('-', 140));
+
+                        Console.WriteLine("To Add this book press 1");
+                        choice = Console.ReadLine();
+
+                        //confirm adding new book
+                        if (choice == "1")
+                        {
+                            Books.Add((ID, name, author, qun, 0, price, category, BorrowPeriod));
+                            int catgNOFB = Categories[i].NOFBooks + 1;
+                            Categories[i] = (Categories[i].CID, Categories[i].CName, catgNOFB);
+
+                            SaveCategoriesToFile();
+                            SaveBooksToFile();
+                            Console.WriteLine("Book Added Succefully");
+                        }
+                        else
+                        {
+                            Console.WriteLine("The change was saved..");
+                        }
+                        return;
+                       
+                    }
+                }
+                if (category == null)
+                {
+
+                    Console.WriteLine("This category not existing in Library ");
+                    Console.WriteLine("Plese choose Category from the list");
+                    flage = true;
+                }
+
+            } while (flage == true);
+           
            
         }
 
@@ -1507,51 +1516,57 @@ namespace BasicLibrary
 
         static void UserProfile()
         {
-            Console.Clear();
-            borrowBook.Clear ();
-            LoadBorrowedBookFile();
-            int index = -1;
-            for (int i = 0; i < Users.Count; i++)
+            try
             {
-                if(userID == Users[i].UID)
+                Console.Clear();
+                borrowBook.Clear();
+                LoadBorrowedBookFile();
+                int index = -1;
+                for (int i = 0; i < Users.Count; i++)
                 {
-                    Console.WriteLine("User ID: " + userID);
-                    Console.WriteLine("User Name: " + Users[i].UserName);
-                    Console.WriteLine("User Name: " + Users[i].email);
-                }
-            }
-            Console.WriteLine("**********************************************************");
-            Console.WriteLine("\nHistory of Borrowing");
-            Console.WriteLine("--------------------------------------------------------");
-            Console.WriteLine("{0,-10} {1,-20} {2,-10} {3,-10}", "Book ID", "Book Name", "Status", "Return Status");
-            Console.WriteLine("--------------------------------------------------------");
-            for (int i = 0;i<borrowBook.Count; i++)
-            {
-               
-                if (borrowBook[i].UId == userID)
-                {
-                    index = Books.FindIndex(book => book.ID == borrowBook[i].BId);
-                    if (borrowBook[i].isReturn)
+                    if (userID == Users[i].UID)
                     {
-                        
-                        if (borrowBook[i].Rdate < DateTime.Today)
+                        Console.WriteLine("User ID: " + userID);
+                        Console.WriteLine("User Name: " + Users[i].UserName);
+                        Console.WriteLine("User Name: " + Users[i].email);
+                    }
+                }
+                Console.WriteLine("**********************************************************");
+                Console.WriteLine("\nHistory of Borrowing");
+                Console.WriteLine("--------------------------------------------------------");
+                Console.WriteLine("{0,-10} {1,-20} {2,-10} {3,-10}", "Book ID", "Book Name", "Status", "Return Status");
+                Console.WriteLine("--------------------------------------------------------");
+                for (int i = 0; i < borrowBook.Count; i++)
+                {
+
+                    if (borrowBook[i].UId == userID)
+                    {
+                        index = Books.FindIndex(book => book.ID == borrowBook[i].BId);
+                        if (borrowBook[i].isReturn)
                         {
-                            Console.WriteLine("{0,-10} {1,-20} {2,-10} {3,-20}",borrowBook[i].BId , Books[index].BName ,"Returned","Overdue");
+
+                            if (borrowBook[i].Rdate < DateTime.Today)
+                            {
+                                Console.WriteLine("{0,-10} {1,-20} {2,-10} {3,-20}", borrowBook[i].BId, Books[index].BName, "Returned", "Overdue");
+                            }
+                            else
+                            {
+                                Console.WriteLine("{0,-10} {1,-20} {2,-10} {3,-20}", borrowBook[i].BId, Books[index].BName, "Returned", "On Time");
+
+                            }
+
                         }
                         else
                         {
-                            Console.WriteLine("{0,-10} {1,-20} {2,-10} {3,-20}", borrowBook[i].BId, Books[index].BName, "Returned", "On Time");
-                         
-                        }
+                            Console.WriteLine("{0,-10} {1,-20} {2,-10} {3,-20}", borrowBook[i].BId, Books[index].BName, "Borrowed", borrowBook[i].Rdate.ToString("yyyy-MM-dd"));
 
-                    }
-                    else
-                    {
-                        Console.WriteLine("{0,-10} {1,-20} {2,-10} {3,-20}", borrowBook[i].BId, Books[index].BName, "Borrowed", borrowBook[i].Rdate.ToString("yyyy-MM-dd"));
-                       
+                        }
                     }
                 }
+
             }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+           
                 
         }
         static int? ParseInt(string value)
